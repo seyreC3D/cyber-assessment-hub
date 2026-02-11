@@ -2258,53 +2258,29 @@ Return ONLY the JSON, no other text.`;
 
     // YOUR Firebase config - MUST match login-firebase.html exactly
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_PROJECT_ID.appspot.com",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+         apiKey: "AIzaSyAwyfkJG8dMFMVAxiinBigf1Q1Hv05fibI",
+         authDomain: "cyber-essentials-checker.firebaseapp.com",
+         projectId: "cyber-essentials-checker",
+         storageBucket: "cyber-essentials-checker.firebasestorage.app",
+         messagingSenderId: "675223410675",
+         appId: "1:675223410675:web:e216ba72aecef16e47e486",
+         measurementId: "G-5LQ7FG69W3"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
     console.log('=== AUTH CHECK START ===');
-    console.log('Current URL:', window.location.href);
-    console.log('LocalStorage firebaseAuthComplete:', localStorage.getItem('firebaseAuthComplete'));
-
-    let authCheckComplete = false;
-    let redirectTimeout = null;
-
-    // Set a timeout - if auth doesn't resolve in 5 seconds, something is wrong
-    const maxWaitTime = setTimeout(() => {
-        if (!authCheckComplete) {
-            console.error('Auth check timeout - forcing redirect to login');
-            localStorage.removeItem('firebaseAuthComplete');
-            window.location.href = 'login-firebase.html';
-        }
-    }, 5000);
 
     // Listen for auth state changes
     onAuthStateChanged(auth, (user) => {
-        clearTimeout(maxWaitTime);
-        authCheckComplete = true;
-
         console.log('=== AUTH STATE CHANGED ===');
-        console.log('User object:', user);
-        console.log('User email:', user?.email);
-        console.log('User display name:', user?.displayName);
+        console.log('User:', user?.email || 'null');
 
         if (user) {
-            // USER IS AUTHENTICATED - ALLOW ACCESS
-            console.log('✅ User IS authenticated:', user.email);
+            // USER IS AUTHENTICATED - STAY ON PAGE
+            console.log('✅ User authenticated:', user.email);
             
-            // Clear any pending redirect
-            if (redirectTimeout) {
-                clearTimeout(redirectTimeout);
-                redirectTimeout = null;
-            }
-
             // Display user info in header
             const userInfo = document.getElementById('user-info');
             if (userInfo) {
@@ -2312,55 +2288,22 @@ Return ONLY the JSON, no other text.`;
                                    localStorage.getItem('userName') || 
                                    user.email.split('@')[0];
                 userInfo.textContent = `👤 ${displayName}`;
-                console.log('User info displayed:', displayName);
             }
 
-            // Clear the auth complete flag
+            // Clear any login flags
             localStorage.removeItem('firebaseAuthComplete');
             
-            console.log('=== ACCESS GRANTED ===');
+            console.log('=== STAYING ON ASSESSMENT PAGE ===');
 
         } else {
-            // NO USER - CHECK IF WE JUST LOGGED IN
-            console.log('❌ User is NULL');
-            
-            const justLoggedIn = localStorage.getItem('firebaseAuthComplete');
-            console.log('Just logged in flag:', justLoggedIn);
-
-            if (justLoggedIn === 'true') {
-                // We just logged in but Firebase says no user
-                // This can happen due to timing - give it more time
-                console.log('⏳ Auth flagged as complete but user is null - waiting 2 more seconds...');
-                
-                redirectTimeout = setTimeout(() => {
-                    // Check one more time
-                    console.log('Checking auth.currentUser after delay:', auth.currentUser);
-                    
-                    if (auth.currentUser) {
-                        console.log('✅ User appeared after delay:', auth.currentUser.email);
-                        // onAuthStateChanged should trigger again
-                    } else {
-                        console.log('❌ Still no user after delay - redirecting to login');
-                        localStorage.removeItem('firebaseAuthComplete');
-                        window.location.href = 'login-firebase.html';
-                    }
-                }, 2000);
-                
-            } else {
-                // Normal case - no user, not just logged in
-                console.log('No user and no recent login - redirecting to login page');
-                window.location.href = 'login-firebase.html';
-            }
+            // NO USER - REDIRECT TO LOGIN
+            console.log('❌ No user - redirecting to login');
+            window.location.href = 'login-firebase.html';
         }
     }, (error) => {
-        // Error in auth state listener
-        console.error('=== AUTH STATE ERROR ===', error);
-        clearTimeout(maxWaitTime);
-        authCheckComplete = true;
-        
-        // On error, redirect to login after showing error
-        alert('Authentication error: ' + error.message + '\n\nPlease try logging in again.');
-        localStorage.removeItem('firebaseAuthComplete');
+        // Error handler
+        console.error('Auth error:', error);
+        alert('Authentication error. Please try logging in again.');
         window.location.href = 'login-firebase.html';
     });
 
@@ -2368,24 +2311,17 @@ Return ONLY the JSON, no other text.`;
     window.logout = async function() {
         if (confirm('Are you sure you want to logout?')) {
             try {
-                console.log('=== LOGOUT INITIATED ===');
+                console.log('Logging out...');
                 await signOut(auth);
-                
-                // Clear all storage
-                localStorage.removeItem('userEmail');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('firebaseAuthComplete');
-                
-                console.log('✅ Logout successful - redirecting to login');
+                localStorage.clear();
                 window.location.href = 'login-firebase.html';
-                
             } catch (error) {
                 console.error('Logout error:', error);
-                alert('Error logging out: ' + error.message + '\n\nPlease try again.');
+                alert('Error logging out: ' + error.message);
             }
         }
     };
 
-    console.log('=== AUTH LISTENER REGISTERED ===');
+    console.log('=== AUTH LISTENER ACTIVE ===');
 </script></body>
 </html>
