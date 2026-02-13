@@ -1,13 +1,41 @@
-<script>
-    // Variable to store the company name
-    let companyName = 'Enter your company name'; // Default value, can be changed by user input
-</script>
-
-<header>
-    <h1>${companyName}</h1>
-</header>
-
-<section class="intro">
-    <p>Please enter your company name if desired:</p>
-    <input type="text" placeholder="Company Name" onchange="companyName = this.value;" />
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Essentials Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Cyber Essentials Checker</h1>
+    </header>
+    <section class="intro">
+        <h2>How This Works</h2>
+        <p>This tool helps you assess whether your organization meets the Cyber Essentials criteria.</p>
+        <div>
+            <label for="companyName">Enter your company name:</label>
+            <input type="text" id="companyName" placeholder="Company Name">
+        </div>
+    </section>
+    <section class="assessment">
+        <h2>Assessment Sections</h2>
+        <p>Assessment details go here.</p>
+    </section>
+    <section class="results">
+        <h2>Results</h2>
+        <p id="resultDisplay">Your results will appear here.</p>
+    </section>
+    <script>
+        document.getElementById('companyName').addEventListener('input', function() {
+            sessionStorage.setItem('companyName', this.value);
+        });
+        window.onload = function() {
+            var storedName = sessionStorage.getItem('companyName');
+            if (storedName) {
+                document.getElementById('resultDisplay').textContent = 'Results for: ' + storedName;
+            }
+        };
+    </script>
+</body>
+</html>
