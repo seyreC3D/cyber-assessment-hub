@@ -584,6 +584,7 @@ body {
     }
 
     /* Protect individual atomic boxes from splitting across pages */
+    .summary-box,
     .score-card,
     .issue-item,
     .warning-item,

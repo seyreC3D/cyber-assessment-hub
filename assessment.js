@@ -704,6 +704,7 @@ function displayResults(analysis, statusIcon, statusTitle, statusSubtitle, resul
 
     // --- Summary Box ---
     const summaryBox = document.createElement('div');
+    summaryBox.className = 'summary-box';
     summaryBox.style.cssText = 'background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px;';
     const summaryH3 = document.createElement('h3');
     summaryH3.style.cssText = 'margin-bottom: 15px; color: #028090;';
