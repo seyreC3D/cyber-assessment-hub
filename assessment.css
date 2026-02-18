@@ -74,21 +74,22 @@ body {
 .how-it-works-link {
     position: absolute;
     top: 15px;
-    right: 110px;
-    background: none;
+    right: 120px;
+    background: rgba(255, 255, 255, 0.2);
     color: white;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
-    opacity: 0.9;
-    text-decoration: underline;
-    transition: opacity 0.3s ease;
-    padding: 8px 10px;
+    opacity: 0.95;
+    transition: all 0.3s ease;
+    padding: 8px 14px;
 }
 
 .how-it-works-link:hover {
     opacity: 1;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .welcome-overlay {

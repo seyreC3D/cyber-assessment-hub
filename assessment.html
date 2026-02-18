@@ -477,18 +477,39 @@
     <!-- Welcome modal logic -->
     <script>
         function showWelcomeModal() {
-            document.getElementById('welcome-overlay').classList.add('show');
+            var overlay = document.getElementById('welcome-overlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                overlay.classList.add('show');
+            }
         }
 
         function dismissWelcomeModal() {
-            document.getElementById('welcome-overlay').classList.remove('show');
+            var overlay = document.getElementById('welcome-overlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+                overlay.classList.remove('show');
+            }
             localStorage.setItem('ce-checker-welcome-seen', 'true');
         }
 
-        // Show on first visit only
-        if (!localStorage.getItem('ce-checker-welcome-seen')) {
-            showWelcomeModal();
-        }
+        // Show on first visit only, after DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('ce-checker-welcome-seen')) {
+                showWelcomeModal();
+            }
+
+            // Attach listeners as backup for inline onclick
+            var dismissBtn = document.querySelector('.welcome-dismiss-button');
+            if (dismissBtn) {
+                dismissBtn.addEventListener('click', dismissWelcomeModal);
+            }
+
+            var howLink = document.querySelector('.how-it-works-link');
+            if (howLink) {
+                howLink.addEventListener('click', showWelcomeModal);
+            }
+        });
     </script>
 
     <!-- Application logic (extracted) -->
