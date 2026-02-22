@@ -1,5 +1,21 @@
 # Release Notes
 
+## v1.5.0 - 2026-02-22
+
+### Supply Chain Vendor Assessment
+- New Supply Chain section (Control 7) for organisations that use third-party vendors or managed service providers
+- Two-step welcome modal introduces the section before it is shown; choice persisted to `localStorage` so it isn't repeated
+- Add unlimited vendors via "Add Vendor" cards; each vendor gets its own collapsible card with a dedicated set of supply-chain security questions
+- Vendor answers are collected separately from the six core CE controls and included in the full analysis output
+- Section is fully optional — toggling it off hides the vendor cards without affecting the main assessment score
+
+### Bug Fix — Analyze button non-responsive with supply chain enabled
+- `collectResponses()` queried all checked radio buttons on the page, including vendor radios generated inside `.vendor-question` divs
+- When no matching `.question` ancestor existed, `radio.closest('.question')` returned `null`, and the subsequent `question.dataset.control` access threw a `TypeError` that crashed `analyzeAssessment()` before any UI feedback appeared
+- Fixed by adding a null-guard that skips any radio not inside a `.question[data-control]` element, confining collection to the six core CE control radios
+
+---
+
 ## v1.4.0 - 2026-02-20
 
 ### Risk Overview Dashboard
