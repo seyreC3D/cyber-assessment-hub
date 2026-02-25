@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAF Self-Assessment &mdash; Powered by Cyber 3D</title>
+<link rel="stylesheet" href="caf-assessment.css">
+</head>
+<body>
+<div class="container">
+<div class="uat-banner">&#9888;&#65039;  UAT &mdash; Pre-production  &#9888;&#65039;</div>
+<div class="header">
+  <h1>CAF Self-Assessment Tool</h1>
+  <div class="subtitle-row">
+    <p>NCSC Cyber Assessment Framework v4.0</p>
+    <button class="how-it-works-link" onclick="showWelcomeModal()">How This Works</button>
+  </div>
+</div>
+<div id="welcome-overlay" class="welcome-overlay">
+  <div class="welcome-modal">
+    <h2>CAF Self-Assessment Tool</h2>
+    <p>This tool evaluates your organisation against all 41 contributing outcomes of the NCSC Cyber Assessment Framework v4.0, covering 4 objectives and 14 principles.</p>
+    <p>For each question, choose one of four ratings:<br>
+      <strong>Achieved</strong> &mdash; fully in place<br>
+      <strong>Partially Achieved</strong> &mdash; some elements present<br>
+      <strong>Not Achieved</strong> &mdash; not in place<br>
+      <strong>Not Applicable</strong> &mdash; does not apply to your organisation</p>
+    <p>Responses are saved automatically in your browser. No data leaves your device until you click Analyse.</p>
+    <p class="welcome-note">Use the <em>Ask Oracle</em> button on any question for CAF-specific NCSC guidance.</p>
+    <button class="welcome-dismiss-button" onclick="dismissWelcome()">Start Assessment</button>
+  </div>
+</div>
+<div class="main-content">
+<div id="progress-tracker" class="progress-tracker">
+  <div class="progress-overview">
+    <svg class="progress-ring" viewBox="0 0 80 80">
+      <circle class="progress-ring-bg" cx="40" cy="40" r="34"/>
+      <circle class="progress-ring-fill" id="progress-ring-fill" cx="40" cy="40" r="34"/>
+    </svg>
+    <div class="progress-ring-label" id="progress-ring-label">0%</div>
+    <div class="progress-ring-sub" id="progress-ring-sub">0 of 83 answered</div>
+  </div>
+  <div class="progress-sections">
+    <div class="progress-objective-label">A &mdash; Managing Risk</div>
+    <div class="progress-row" data-target="A1"><div class="progress-row-badge" id="progress-badge-A1"></div><div class="progress-row-name">A1 Governance</div><div class="progress-row-count" id="progress-count-A1">0/6</div></div>
+    <div class="progress-row" data-target="A2"><div class="progress-row-badge" id="progress-badge-A2"></div><div class="progress-row-name">A2 Risk Mgmt</div><div class="progress-row-count" id="progress-count-A2">0/4</div></div>
+    <div class="progress-row" data-target="A3"><div class="progress-row-badge" id="progress-badge-A3"></div><div class="progress-row-name">A3 Assets</div><div class="progress-row-count" id="progress-count-A3">0/3</div></div>
+    <div class="progress-row" data-target="A4"><div class="progress-row-badge" id="progress-badge-A4"></div><div class="progress-row-name">A4 Supply Chain</div><div class="progress-row-count" id="progress-count-A4">0/4</div></div>
+    <div class="progress-objective-label">B &mdash; Protecting</div>
+    <div class="progress-row" data-target="B1"><div class="progress-row-badge" id="progress-badge-B1"></div><div class="progress-row-name">B1 Policies</div><div class="progress-row-count" id="progress-count-B1">0/4</div></div>
+    <div class="progress-row" data-target="B2"><div class="progress-row-badge" id="progress-badge-B2"></div><div class="progress-row-name">B2 Identity &amp; Access</div><div class="progress-row-count" id="progress-count-B2">0/8</div></div>
+    <div class="progress-row" data-target="B3"><div class="progress-row-badge" id="progress-badge-B3"></div><div class="progress-row-name">B3 Data Security</div><div class="progress-row-count" id="progress-count-B3">0/10</div></div>
+    <div class="progress-row" data-target="B4"><div class="progress-row-badge" id="progress-badge-B4"></div><div class="progress-row-name">B4 System Security</div><div class="progress-row-count" id="progress-count-B4">0/8</div></div>
+    <div class="progress-row" data-target="B5"><div class="progress-row-badge" id="progress-badge-B5"></div><div class="progress-row-name">B5 Resilience</div><div class="progress-row-count" id="progress-count-B5">0/6</div></div>
+    <div class="progress-row" data-target="B6"><div class="progress-row-badge" id="progress-badge-B6"></div><div class="progress-row-name">B6 Training</div><div class="progress-row-count" id="progress-count-B6">0/4</div></div>
+    <div class="progress-objective-label">C &mdash; Detecting</div>
+    <div class="progress-row" data-target="C1"><div class="progress-row-badge" id="progress-badge-C1"></div><div class="progress-row-name">C1 Monitoring</div><div class="progress-row-count" id="progress-count-C1">0/12</div></div>
+    <div class="progress-row" data-target="C2"><div class="progress-row-badge" id="progress-badge-C2"></div><div class="progress-row-name">C2 Discovery</div><div class="progress-row-count" id="progress-count-C2">0/4</div></div>
+    <div class="progress-objective-label">D &mdash; Minimising Impact</div>
+    <div class="progress-row" data-target="D1"><div class="progress-row-badge" id="progress-badge-D1"></div><div class="progress-row-name">D1 Response</div><div class="progress-row-count" id="progress-count-D1">0/6</div></div>
+    <div class="progress-row" data-target="D2"><div class="progress-row-badge" id="progress-badge-D2"></div><div class="progress-row-name">D2 Lessons Learned</div><div class="progress-row-count" id="progress-count-D2">0/4</div></div>
+  </div>
+</div>
+<div class="assessment-sections">
+<!-- ===== SECTION A1 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('A1')">
+  <div class="control-number">A1</div>
+  <div class="control-title"><h3>Governance</h3><p>Board direction, roles &amp; responsibilities, security decision-making</p></div>
+  <div class="toggle-icon" id="toggle-A1">&#9660;</div>
+</div>
+<div class="control-content" id="content-A1">
+  <div class="outcome-group">
+    <div class="outcome-label">A1.a &mdash; Board Direction</div>
+<div class="question" data-principle="A1" data-outcome="A1.a">
+<div class="question-text">Does the board receive and act on regular cyber security reports covering risk, controls, and incidents?</div>
+<div class="question-help">The board should receive timely information to understand the organisation&#39;s cyber security posture. Reports should cover current risk levels, control effectiveness, and significant incidents.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A1a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A1a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A1a_1"></div>
+</div>
+<div class="question" data-principle="A1" data-outcome="A1.a">
+<div class="question-text">Is a named board-level individual accountable for cyber security?</div>
+<div class="question-help">Accountability at board level ensures cyber security receives appropriate attention and resources. This individual should understand the organisation&#39;s cyber risk landscape and be able to challenge technical advice.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A1a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A1a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A1a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">A1.b &mdash; Roles &amp; Responsibilities</div>
+<div class="question" data-principle="A1" data-outcome="A1.b">
+<div class="question-text">Are cyber security roles and responsibilities clearly defined and communicated across the organisation?</div>
+<div class="question-help">All staff should understand their cyber security responsibilities. Key roles (CISO, security manager, incident responders) should be formally assigned, documented, and communicated.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A1b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A1b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A1b_1"></div>
+</div>
+<div class="question" data-principle="A1" data-outcome="A1.b">
+<div class="question-text">Is there a documented responsibility assignment (RACI or equivalent) for cyber security functions?</div>
+<div class="question-help">A responsibility matrix ensures clarity over who is Responsible, Accountable, Consulted, and Informed for key security activities including incidents, risk decisions, and control ownership.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A1b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A1b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A1b_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">A1.c &mdash; Decision-making</div>
+<div class="question" data-principle="A1" data-outcome="A1.c">
+<div class="question-text">Are cyber security considerations embedded into organisational decision-making and change management processes?</div>
+<div class="question-help">Major business decisions (new services, procurements, organisational changes) should include a security impact assessment. Security sign-off should be part of the change management process.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A1c_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1c_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1c_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1c_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A1c_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A1c_1"></div>
+</div>
+<div class="question" data-principle="A1" data-outcome="A1.c">
+<div class="question-text">Are changes to essential functions assessed for security implications before implementation?</div>
+<div class="question-help">Change management processes should require security review to prevent new vulnerabilities being introduced or existing controls being bypassed. Evidence of security assessment should be part of the change record.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A1c_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1c_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1c_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A1c_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A1c_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A1c_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION A2 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('A2')">
+  <div class="control-number">A2</div>
+  <div class="control-title"><h3>Risk Management</h3><p>Risk management process and understanding threat</p></div>
+  <div class="toggle-icon" id="toggle-A2">&#9660;</div>
+</div>
+<div class="control-content" id="content-A2">
+  <div class="outcome-group">
+    <div class="outcome-label">A2.a &mdash; Risk Management Process</div>
+<div class="question" data-principle="A2" data-outcome="A2.a">
+<div class="question-text">Is there a documented cyber risk management process that is reviewed and updated regularly?</div>
+<div class="question-help">The organisation should identify, assess, and manage cyber security risks using a repeatable, documented process aligned with business objectives. This should be reviewed at least annually or following significant changes.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A2a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A2a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A2a_1"></div>
+</div>
+<div class="question" data-principle="A2" data-outcome="A2.a">
+<div class="question-text">Does the risk management process cover risks from third parties, new technologies, and changes to the operating environment?</div>
+<div class="question-help">Cloud services, IoT, AI, and other evolving technologies, as well as supply chain dependencies, should be assessed for cyber risk as part of the standard risk management process.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A2a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A2a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A2a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">A2.b &mdash; Understanding Threat <em>(v4.0)</em></div>
+<div class="question" data-principle="A2" data-outcome="A2.b">
+<div class="question-text">Does the organisation maintain awareness of relevant threat actors and their tactics, techniques, and procedures (TTPs)?</div>
+<div class="question-help">Understanding who might target your organisation and how they operate helps prioritise defensive measures. This includes nation-state, criminal, hacktivist, and insider threats relevant to your sector and essential functions.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A2b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A2b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A2b_1"></div>
+</div>
+<div class="question" data-principle="A2" data-outcome="A2.b">
+<div class="question-text">Is threat intelligence actively consumed from relevant sources and integrated into risk management decisions?</div>
+<div class="question-help">NCSC advisories, sector-specific feeds, and commercial threat intelligence should inform risk assessments and security investment priorities. Intelligence should be operationalised, not just collected.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A2b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A2b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A2b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A2b_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION A3 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('A3')">
+  <div class="control-number">A3</div>
+  <div class="control-title"><h3>Asset Management</h3><p>Hardware, software, and data asset inventory</p></div>
+  <div class="toggle-icon" id="toggle-A3">&#9660;</div>
+</div>
+<div class="control-content" id="content-A3">
+  <div class="outcome-group">
+    <div class="outcome-label">A3.a &mdash; Asset Management</div>
+<div class="question" data-principle="A3" data-outcome="A3.a">
+<div class="question-text">Is there a maintained, up-to-date inventory of all hardware assets supporting essential functions?</div>
+<div class="question-help">All servers, network devices, endpoints, OT/ICS equipment, and other hardware supporting essential functions should be inventoried with owner, location, criticality, and support lifecycle status.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A3a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A3a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A3a_1"></div>
+</div>
+<div class="question" data-principle="A3" data-outcome="A3.a">
+<div class="question-text">Is there a maintained, up-to-date inventory of all software assets supporting essential functions?</div>
+<div class="question-help">All applications, operating systems, middleware, and firmware should be tracked including version, patch status, support lifecycle, and vendor. Unsupported software should be flagged for action.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A3a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A3a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A3a_2"></div>
+</div>
+<div class="question" data-principle="A3" data-outcome="A3.a">
+<div class="question-text">Are data assets classified and mapped to understand information flows supporting essential functions?</div>
+<div class="question-help">The organisation should know what data it holds, its sensitivity classification, where it is stored and processed, how it flows between systems, and who has access to it.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A3a_3" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_3" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_3" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A3a_3" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A3a_3" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A3a_3"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION A4 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('A4')">
+  <div class="control-number">A4</div>
+  <div class="control-title"><h3>Supply Chain</h3><p>Supplier assurance and secure software development</p></div>
+  <div class="toggle-icon" id="toggle-A4">&#9660;</div>
+</div>
+<div class="control-content" id="content-A4">
+  <div class="outcome-group">
+    <div class="outcome-label">A4.a &mdash; Supply Chain</div>
+<div class="question" data-principle="A4" data-outcome="A4.a">
+<div class="question-text">Are third-party suppliers assessed for cyber security risk before engagement and reviewed on an ongoing basis?</div>
+<div class="question-help">Due diligence should be conducted on all suppliers who access your systems, handle your data, or provide services supporting essential functions. This should include ongoing monitoring, not just initial onboarding.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A4a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A4a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A4a_1"></div>
+</div>
+<div class="question" data-principle="A4" data-outcome="A4.a">
+<div class="question-text">Are cyber security requirements included in supplier contracts, including incident notification obligations?</div>
+<div class="question-help">Contracts should specify minimum security standards, audit rights, data handling requirements, breach notification timelines (typically 24-72 hours), and consequences for non-compliance.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A4a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A4a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A4a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">A4.b &mdash; Secure Software Development <em>(v4.0)</em></div>
+<div class="question" data-principle="A4" data-outcome="A4.b">
+<div class="question-text">Are secure development practices (SSDLC) applied to in-house developed or commissioned software supporting essential functions?</div>
+<div class="question-help">Software should be developed following secure coding standards (e.g. OWASP), with security testing (SAST, DAST, penetration testing) integrated into the development lifecycle before production deployment.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A4b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A4b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A4b_1"></div>
+</div>
+<div class="question" data-principle="A4" data-outcome="A4.b">
+<div class="question-text">Are third-party libraries, open source components, and software dependencies tracked, assessed for vulnerabilities, and kept updated?</div>
+<div class="question-help">Software supply chain risk is significant. All dependencies should be inventoried (e.g. via SBOM), monitored for known vulnerabilities (CVEs), and updated within defined risk-appropriate timeframes.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_A4b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_A4b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_A4b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_A4b_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION B1 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('B1')">
+  <div class="control-number">B1</div>
+  <div class="control-title"><h3>Service Protection Policies &amp; Processes</h3><p>Policy development and implementation for essential functions</p></div>
+  <div class="toggle-icon" id="toggle-B1">&#9660;</div>
+</div>
+<div class="control-content" id="content-B1">
+  <div class="outcome-group">
+    <div class="outcome-label">B1.a &mdash; Policy &amp; Process Development</div>
+<div class="question" data-principle="B1" data-outcome="B1.a">
+<div class="question-text">Are cyber security policies documented, reviewed at least annually, and aligned to the organisation's current risk profile?</div>
+<div class="question-help">Policies should cover key areas: access control, data protection, incident management, acceptable use, remote working, and patch management. They should be reviewed annually or following significant changes or incidents.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B1a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B1a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B1a_1"></div>
+</div>
+<div class="question" data-principle="B1" data-outcome="B1.a">
+<div class="question-text">Do policies reference applicable legal obligations, sector regulations, and NCSC guidance?</div>
+<div class="question-help">Policies should align with legal requirements (NIS Regulations, GDPR, sector-specific regulations) and recognised good practice guidance from NCSC and standards such as ISO 27001 or NIST CSF.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B1a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B1a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B1a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B1.b &mdash; Policy &amp; Process Implementation</div>
+<div class="question" data-principle="B1" data-outcome="B1.b">
+<div class="question-text">Are cyber security policies actively enforced, with evidence of compliance monitoring?</div>
+<div class="question-help">Policies must be more than documents. There should be measurable evidence of compliance through audits, automated technical controls, and management reporting. Non-compliance should be tracked and resolved.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B1b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B1b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B1b_1"></div>
+</div>
+<div class="question" data-principle="B1" data-outcome="B1.b">
+<div class="question-text">Are non-compliance issues identified, tracked to resolution, and escalated to management where appropriate?</div>
+<div class="question-help">When policy breaches occur, there should be a clear process for handling non-compliance including root cause analysis, remediation tracking, and escalation paths for serious or repeated violations.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B1b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B1b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B1b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B1b_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION B2 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('B2')">
+  <div class="control-number">B2</div>
+  <div class="control-title"><h3>Identity &amp; Access Control</h3><p>Authentication, device management, privileged access, and IAM</p></div>
+  <div class="toggle-icon" id="toggle-B2">&#9660;</div>
+</div>
+<div class="control-content" id="content-B2">
+  <div class="outcome-group">
+    <div class="outcome-label">B2.a &mdash; Identity Verification, Authentication &amp; Authorisation</div>
+<div class="question" data-principle="B2" data-outcome="B2.a">
+<div class="question-text">Is multi-factor authentication (MFA) enforced for all users accessing systems supporting essential functions, especially for remote and privileged access?</div>
+<div class="question-help">MFA significantly reduces credential-based attack risk. It should be mandatory for all remote access, privileged accounts, and access to systems supporting essential functions. Exceptions should be formally risk-accepted.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2a_1"></div>
+</div>
+<div class="question" data-principle="B2" data-outcome="B2.a">
+<div class="question-text">Are authentication mechanisms appropriate to the sensitivity of the systems accessed, and are authorisation decisions based on least privilege?</div>
+<div class="question-help">Stronger authentication (hardware tokens, certificate-based) should protect more sensitive systems. Authorisation should grant only the minimum access required for the user's role, with regular reviews to confirm ongoing appropriateness.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B2.b &mdash; Device Management</div>
+<div class="question" data-principle="B2" data-outcome="B2.b">
+<div class="question-text">Are all devices accessing systems supporting essential functions corporately managed, enrolled in a device management solution, and configured to security policy?</div>
+<div class="question-help">Devices should be enrolled in MDM/UEM that enforces encryption, patch compliance, and security policies, and enables remote wipe. Non-compliant devices should be denied access via conditional access controls.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2b_1"></div>
+</div>
+<div class="question" data-principle="B2" data-outcome="B2.b">
+<div class="question-text">Are unmanaged, personal (BYOD), or guest devices restricted from accessing essential function networks and data?</div>
+<div class="question-help">If BYOD is permitted, appropriate controls (containerisation, conditional access) should limit risk to essential functions. Unmanaged devices should be blocked from direct network access or strictly limited via network segmentation.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2b_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B2.c &mdash; Privileged User Management</div>
+<div class="question" data-principle="B2" data-outcome="B2.c">
+<div class="question-text">Are privileged accounts separate from standard user accounts and used only when performing administrative tasks?</div>
+<div class="question-help">Administrators should use standard accounts for day-to-day activities and elevated accounts only for administrative tasks. This limits the exposure of high-privilege credentials to malware and phishing attacks.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2c_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2c_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2c_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2c_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2c_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2c_1"></div>
+</div>
+<div class="question" data-principle="B2" data-outcome="B2.c">
+<div class="question-text">Are privileged access activities logged, monitored, and subject to regular review?</div>
+<div class="question-help">All use of privileged accounts should be recorded in tamper-resistant logs and reviewed regularly to detect unauthorised, anomalous, or excessive use of administrative privileges.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2c_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2c_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2c_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2c_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2c_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2c_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B2.d &mdash; Identity &amp; Access Management</div>
+<div class="question" data-principle="B2" data-outcome="B2.d">
+<div class="question-text">Is there a formal joiners/movers/leavers process ensuring timely access provisioning and revocation?</div>
+<div class="question-help">Access should be granted based on role requirements and revoked promptly when staff leave or change roles. Accounts should be disabled within 24 hours of departure. Regular access reviews should confirm ongoing appropriateness.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2d_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2d_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2d_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2d_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2d_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2d_1"></div>
+</div>
+<div class="question" data-principle="B2" data-outcome="B2.d">
+<div class="question-text">Is access to systems supporting essential functions granted on a least-privilege basis and reviewed regularly?</div>
+<div class="question-help">Users should have only the minimum access needed for their role. Access reviews (at least annually for standard users, quarterly for privileged users) should confirm permissions remain appropriate and remove unnecessary access.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B2d_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2d_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2d_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B2d_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B2d_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B2d_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION B3 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('B3')">
+  <div class="control-number">B3</div>
+  <div class="control-title"><h3>Data Security</h3><p>Data classification, encryption in transit and at rest, mobile data, and sanitisation</p></div>
+  <div class="toggle-icon" id="toggle-B3">&#9660;</div>
+</div>
+<div class="control-content" id="content-B3">
+  <div class="outcome-group">
+    <div class="outcome-label">B3.a &mdash; Understanding Data</div>
+<div class="question" data-principle="B3" data-outcome="B3.a">
+<div class="question-text">Is sensitive data identified, classified, and mapped to understand where it is stored and how it flows?</div>
+<div class="question-help">Data supporting essential functions should be classified by sensitivity. The organisation should maintain data flow diagrams showing movement between systems, to third parties, and across boundaries.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3a_1"></div>
+</div>
+<div class="question" data-principle="B3" data-outcome="B3.a">
+<div class="question-text">Are data protection impact assessments (or equivalent) conducted for systems processing sensitive or personal data?</div>
+<div class="question-help">DPIAs or equivalent assessments should be completed before deploying systems handling personal or sensitive data, to identify and mitigate privacy and security risks before they are introduced.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B3.b &mdash; Data in Transit</div>
+<div class="question" data-principle="B3" data-outcome="B3.b">
+<div class="question-text">Is data in transit encrypted using appropriate, up-to-date protocols (e.g. TLS 1.2 or later)?</div>
+<div class="question-help">Data traversing networks must be encrypted to prevent interception. Obsolete protocols (SSL, TLS 1.0/1.1) should be disabled. Certificate management processes should ensure timely renewal.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3b_1"></div>
+</div>
+<div class="question" data-principle="B3" data-outcome="B3.b">
+<div class="question-text">Are encrypted connections authenticated to prevent man-in-the-middle attacks?</div>
+<div class="question-help">Certificate validation should be enforced for all encrypted connections. Expired or self-signed certificates should be detected and remediated promptly. Strong certificate authorities and revocation checking should be used.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3b_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B3.c &mdash; Stored Data</div>
+<div class="question" data-principle="B3" data-outcome="B3.c">
+<div class="question-text">Is sensitive data encrypted at rest using appropriate, current encryption standards?</div>
+<div class="question-help">Encryption at rest protects data from unauthorised access if storage media is lost, stolen, or decommissioned. Encryption keys should be managed separately from the encrypted data, with strong key management processes.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3c_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3c_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3c_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3c_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3c_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3c_1"></div>
+</div>
+<div class="question" data-principle="B3" data-outcome="B3.c">
+<div class="question-text">Are access controls to data stores reviewed regularly to ensure only authorised users and services have access?</div>
+<div class="question-help">Database and file share permissions should be reviewed periodically. Service accounts should have minimal permissions. Unused access should be revoked promptly. Privileged data access should be logged.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3c_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3c_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3c_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3c_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3c_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3c_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B3.d &mdash; Mobile Data</div>
+<div class="question" data-principle="B3" data-outcome="B3.d">
+<div class="question-text">Are mobile devices carrying organisational data encrypted and protected by appropriate security controls?</div>
+<div class="question-help">All laptops, tablets, and phones that store or process organisational data should use full-disk or device encryption, with enforced PINs/passcodes, biometric authentication, and automatic screen lock.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3d_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3d_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3d_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3d_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3d_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3d_1"></div>
+</div>
+<div class="question" data-principle="B3" data-outcome="B3.d">
+<div class="question-text">Is remote wipe capability available and tested for mobile devices containing organisational data?</div>
+<div class="question-help">If a device is lost or stolen, the organisation should be able to remotely erase all organisational data. Remote wipe procedures should be documented, tested, and operable without physical access to the device.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3d_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3d_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3d_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3d_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3d_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3d_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B3.e &mdash; Media &amp; Equipment Sanitisation</div>
+<div class="question" data-principle="B3" data-outcome="B3.e">
+<div class="question-text">Is there a documented and followed process for securely disposing of or re-using media and equipment containing organisational data?</div>
+<div class="question-help">Hard drives, SSDs, USB media, and other storage must be securely wiped (to NCSC or NIST 800-88 standards) or physically destroyed before disposal or reassignment, to prevent data recovery.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3e_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3e_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3e_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3e_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3e_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3e_1"></div>
+</div>
+<div class="question" data-principle="B3" data-outcome="B3.e">
+<div class="question-text">Are sanitisation and disposal activities recorded with evidence of completion?</div>
+<div class="question-help">Certificates of destruction or sanitisation logs should be maintained for all disposed or reassigned equipment. These records support compliance with data protection regulations and provide an audit trail.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B3e_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3e_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3e_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B3e_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B3e_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B3e_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION B4 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('B4')">
+  <div class="control-number">B4</div>
+  <div class="control-title"><h3>System Security</h3><p>Secure by design, configuration, management, and vulnerability management</p></div>
+  <div class="toggle-icon" id="toggle-B4">&#9660;</div>
+</div>
+<div class="control-content" id="content-B4">
+  <div class="outcome-group">
+    <div class="outcome-label">B4.a &mdash; Secure by Design</div>
+<div class="question" data-principle="B4" data-outcome="B4.a">
+<div class="question-text">Are security requirements defined at the design stage for new systems and services supporting essential functions?</div>
+<div class="question-help">Security should be a first-class requirement from design inception, not added retrospectively. Threat modelling should inform architectural decisions. Security requirements should be specified before build commences.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4a_1"></div>
+</div>
+<div class="question" data-principle="B4" data-outcome="B4.a">
+<div class="question-text">Are security architectures reviewed and validated by appropriately skilled personnel before systems enter production?</div>
+<div class="question-help">Designs for systems supporting essential functions should undergo security architecture review before deployment. This may include internal review, third-party assessment, or penetration testing prior to go-live.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B4.b &mdash; Secure Configuration</div>
+<div class="question" data-principle="B4" data-outcome="B4.b">
+<div class="question-text">Are systems hardened according to documented security baselines (e.g. CIS Benchmarks, vendor hardening guides)?</div>
+<div class="question-help">Default configurations are rarely secure. All systems should be configured to a recognised hardening standard with unnecessary services, features, accounts, and protocols disabled or removed before deployment.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4b_1"></div>
+</div>
+<div class="question" data-principle="B4" data-outcome="B4.b">
+<div class="question-text">Is configuration management documented and auditable, with deviations from security baselines tracked and formally approved?</div>
+<div class="question-help">The organisation should be able to demonstrate that systems are configured as intended. Any deviations from baseline configurations should be risk-assessed, formally approved, documented, and reviewed periodically.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4b_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B4.c &mdash; Secure Management</div>
+<div class="question" data-principle="B4" data-outcome="B4.c">
+<div class="question-text">Are administrative actions performed on segregated management interfaces or systems, separated from user traffic?</div>
+<div class="question-help">Management interfaces should be accessible only from dedicated management networks or jump servers, not directly from user networks or the internet. Out-of-band management should be used for critical infrastructure where possible.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4c_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4c_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4c_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4c_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4c_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4c_1"></div>
+</div>
+<div class="question" data-principle="B4" data-outcome="B4.c">
+<div class="question-text">Are management systems themselves secured, hardened, and subject to enhanced monitoring?</div>
+<div class="question-help">Jump servers, privileged access workstations (PAWs), and management networks should receive at least the same level of security hardening and monitoring as the systems they manage &mdash; ideally higher, given their elevated risk.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4c_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4c_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4c_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4c_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4c_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4c_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B4.d &mdash; Vulnerability Management</div>
+<div class="question" data-principle="B4" data-outcome="B4.d">
+<div class="question-text">Is there a vulnerability scanning programme covering all systems and services supporting essential functions?</div>
+<div class="question-help">Regular authenticated vulnerability scanning should identify known weaknesses across internal systems, external-facing services, web applications, and cloud environments. Results should be tracked and trended over time.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4d_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4d_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4d_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4d_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4d_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4d_1"></div>
+</div>
+<div class="question" data-principle="B4" data-outcome="B4.d">
+<div class="question-text">Are vulnerabilities remediated within defined, risk-appropriate timeframes (e.g. critical within 14 days)?</div>
+<div class="question-help">The organisation should have defined SLAs for patching based on severity (critical within 14 days, high within 30 days per NCSC guidance). Remediation progress should be tracked, reported, and exceptions formally risk-accepted.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B4d_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4d_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4d_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B4d_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B4d_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B4d_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION B5 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('B5')">
+  <div class="control-number">B5</div>
+  <div class="control-title"><h3>Resilient Networks &amp; Systems</h3><p>Resilience preparation, design for resilience, and backups</p></div>
+  <div class="toggle-icon" id="toggle-B5">&#9660;</div>
+</div>
+<div class="control-content" id="content-B5">
+  <div class="outcome-group">
+    <div class="outcome-label">B5.a &mdash; Resilience Preparation</div>
+<div class="question" data-principle="B5" data-outcome="B5.a">
+<div class="question-text">Has the organisation identified and documented single points of failure for systems supporting essential functions?</div>
+<div class="question-help">Understanding where a single failure or cyber attack could disrupt an essential function allows proportionate resilience measures to be prioritised and implemented before an incident occurs.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B5a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B5a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B5a_1"></div>
+</div>
+<div class="question" data-principle="B5" data-outcome="B5.a">
+<div class="question-text">Are recovery time objectives (RTO) and recovery point objectives (RPO) defined for essential functions and reflected in system design?</div>
+<div class="question-help">RTO and RPO targets should be agreed with business stakeholders and used to drive resilience architecture decisions, including redundancy levels, failover speed, and backup frequency.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B5a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B5a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B5a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B5.b &mdash; Design for Resilience</div>
+<div class="question" data-principle="B5" data-outcome="B5.b">
+<div class="question-text">Are systems supporting essential functions designed to withstand common disruptions through redundancy, failover, and distribution?</div>
+<div class="question-help">Architectural resilience patterns (N+1 redundancy, active-active clustering, multi-zone deployment) should be used proportionate to the criticality and availability requirements of each essential function.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B5b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B5b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B5b_1"></div>
+</div>
+<div class="question" data-principle="B5" data-outcome="B5.b">
+<div class="question-text">Are internet-facing services regularly reviewed and non-essential external connections disabled or restricted?</div>
+<div class="question-help">Minimising the external attack surface reduces exposure to exploitation. Only services that genuinely require internet exposure should be publicly accessible. Unused ports, protocols, and services should be blocked.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B5b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B5b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B5b_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B5.c &mdash; Backups</div>
+<div class="question" data-principle="B5" data-outcome="B5.c">
+<div class="question-text">Are backups taken regularly, stored offline or immutably, and tested for successful restoration?</div>
+<div class="question-help">Regular backups protect against ransomware, hardware failure, and human error. Backups must be stored where they cannot be modified by an attacker &mdash; offline, air-gapped, or using immutable cloud storage (WORM). Restoration must be regularly tested.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B5c_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5c_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5c_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5c_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B5c_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B5c_1"></div>
+</div>
+<div class="question" data-principle="B5" data-outcome="B5.c">
+<div class="question-text">Are backup and recovery procedures documented and exercised at least annually?</div>
+<div class="question-help">Documented recovery procedures ensure restoration can proceed even if key personnel are unavailable. Annual restoration exercises validate that backups are valid, complete, and can be restored within RTO targets.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B5c_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5c_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5c_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B5c_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B5c_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B5c_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION B6 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('B6')">
+  <div class="control-number">B6</div>
+  <div class="control-title"><h3>Staff Awareness &amp; Training</h3><p>Security culture and role-appropriate training</p></div>
+  <div class="toggle-icon" id="toggle-B6">&#9660;</div>
+</div>
+<div class="control-content" id="content-B6">
+  <div class="outcome-group">
+    <div class="outcome-label">B6.a &mdash; Cyber Security Culture</div>
+<div class="question" data-principle="B6" data-outcome="B6.a">
+<div class="question-text">Does the organisation foster a security-aware culture with well-publicised channels for reporting suspected security incidents?</div>
+<div class="question-help">Staff should feel empowered and safe to report suspicious activity (phishing, anomalous behaviour, lost devices) without fear of blame. Reporting channels should be simple, well-known, and respond promptly to reports.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B6a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B6a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B6a_1"></div>
+</div>
+<div class="question" data-principle="B6" data-outcome="B6.a">
+<div class="question-text">Is senior leadership visibly engaged in promoting cyber security awareness and setting the right cultural tone?</div>
+<div class="question-help">Leadership commitment is the single biggest driver of security culture. Leaders should visibly champion security, participate in training exercises, and be seen to take security decisions seriously.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B6a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B6a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B6a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">B6.b &mdash; Cyber Security Training</div>
+<div class="question" data-principle="B6" data-outcome="B6.b">
+<div class="question-text">Do all staff receive role-appropriate cyber security awareness training on joining and at regular intervals thereafter?</div>
+<div class="question-help">All staff need baseline awareness training covering phishing, password hygiene, acceptable use, and incident reporting. Technical staff need additional training on secure configuration, threat detection, and secure coding relevant to their role.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B6b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B6b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B6b_1"></div>
+</div>
+<div class="question" data-principle="B6" data-outcome="B6.b">
+<div class="question-text">Is training effectiveness measured and content updated to reflect the current threat landscape?</div>
+<div class="question-help">Training effectiveness should be measured &mdash; not just completion rates. Simulated phishing click rates, knowledge assessments, and observed behaviour changes demonstrate whether training is achieving the desired effect.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_B6b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_B6b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_B6b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_B6b_2"></div>
+</div>
+  </div>
+</div>
+</div>
+<!-- ===== SECTION C1 ===== -->
+<div class="assessment-section">
+<div class="control-header" onclick="toggleSection('C1')">
+  <div class="control-number">C1</div>
+  <div class="control-title"><h3>Security Monitoring</h3><p>Log coverage, alert generation, incident identification, tools &amp; skills, and threat intelligence</p></div>
+  <div class="toggle-icon" id="toggle-C1">&#9660;</div>
+</div>
+<div class="control-content" id="content-C1">
+  <div class="outcome-group">
+    <div class="outcome-label">C1.a &mdash; Monitoring Coverage</div>
+<div class="question" data-principle="C1" data-outcome="C1.a">
+<div class="question-text">Are logs collected from all systems supporting essential functions, including endpoints, network devices, authentication systems, and cloud services?</div>
+<div class="question-help">Comprehensive log collection is the foundation of security monitoring. Logs should cover authentication events, network connections, system changes, application activity, and privileged actions across all in-scope systems.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1a_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1a_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1a_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1a_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1a_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1a_1"></div>
+</div>
+<div class="question" data-principle="C1" data-outcome="C1.a">
+<div class="question-text">Is monitoring coverage reviewed regularly to ensure new systems and services are included and no coverage gaps exist?</div>
+<div class="question-help">As the estate evolves (new cloud services, systems, suppliers), monitoring coverage should be reassessed. Coverage gaps should be identified, risk-assessed, and remediated on a priority basis.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1a_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1a_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1a_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1a_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1a_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1a_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">C1.b &mdash; Securing Logs</div>
+<div class="question" data-principle="C1" data-outcome="C1.b">
+<div class="question-text">Are logs protected from tampering, stored in a secure central location, and retained for an appropriate period (typically 12+ months)?</div>
+<div class="question-help">Logs sent to a central, tamper-resistant SIEM or log management platform cannot be modified by an attacker who compromises a monitored system. Retention should support forensic investigation of incidents.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1b_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1b_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1b_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1b_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1b_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1b_1"></div>
+</div>
+<div class="question" data-principle="C1" data-outcome="C1.b">
+<div class="question-text">Are log sources authenticated and the integrity of log data verified?</div>
+<div class="question-help">Logs should come from authenticated sources. Integrity checking (hashing, write-once storage) ensures logs have not been modified post-collection. Log forwarding pipelines should be monitored for interruptions.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1b_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1b_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1b_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1b_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1b_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1b_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">C1.c &mdash; Generating Alerts</div>
+<div class="question" data-principle="C1" data-outcome="C1.c">
+<div class="question-text">Are meaningful security alerts generated from log data using defined correlation rules covering known attack patterns and policy violations?</div>
+<div class="question-help">Raw logs alone are insufficient. Alert rules should detect brute force, lateral movement, privilege escalation, data exfiltration indicators, policy violations, and known attack patterns relevant to the organisation.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1c_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1c_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1c_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1c_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1c_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1c_1"></div>
+</div>
+<div class="question" data-principle="C1" data-outcome="C1.c">
+<div class="question-text">Are alert thresholds regularly tuned to minimise false positives while maintaining detection capability?</div>
+<div class="question-help">Excessive false positives cause alert fatigue and lead to genuine incidents being missed. Alert rules should be regularly reviewed, tuned, and validated against current threat intelligence and organisational baselines.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1c_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1c_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1c_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1c_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1c_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1c_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">C1.d &mdash; Identifying Security Incidents</div>
+<div class="question" data-principle="C1" data-outcome="C1.d">
+<div class="question-text">Is there a defined process for triaging, prioritising, and escalating security alerts to identify genuine incidents?</div>
+<div class="question-help">Not every alert is an incident. A triage process should assess alert severity, eliminate false positives, and determine whether escalation to the incident response process is required, with defined timescales per severity level.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1d_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1d_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1d_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1d_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1d_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1d_1"></div>
+</div>
+<div class="question" data-principle="C1" data-outcome="C1.d">
+<div class="question-text">Are security incidents classified using a consistent severity framework, with appropriate response actions defined for each level?</div>
+<div class="question-help">A consistent severity classification (e.g. P1 Critical to P4 Low) ensures appropriate response resources are allocated. Playbooks or decision trees for common incident types improve triage speed and consistency.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1d_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1d_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1d_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1d_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1d_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1d_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">C1.e &mdash; Monitoring Tools &amp; Skills</div>
+<div class="question" data-principle="C1" data-outcome="C1.e">
+<div class="question-text">Does the organisation have the tools and skilled analysts (in-house or via contracted MSSP/SOC) to perform effective security monitoring?</div>
+<div class="question-help">Effective monitoring requires both technology (SIEM, EDR, NDR) and skilled analysts who can interpret alerts in context. If in-house capability is limited, a managed security operations centre (SOC) arrangement may be appropriate.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1e_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1e_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1e_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1e_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1e_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1e_1"></div>
+</div>
+<div class="question" data-principle="C1" data-outcome="C1.e">
+<div class="question-text">Are monitoring tools and detection rules maintained, updated with current threat intelligence, and assessed for effectiveness?</div>
+<div class="question-help">Security tooling must be kept current. Detection rules should be updated as new threats emerge. Tool effectiveness should be validated through purple team exercises, detection testing, and regular platform health reviews.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1e_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1e_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1e_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1e_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1e_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1e_2"></div>
+</div>
+  </div>
+  <div class="outcome-group">
+    <div class="outcome-label">C1.f &mdash; User Behaviour &amp; Threat Intelligence <em>(v4.0)</em></div>
+<div class="question" data-principle="C1" data-outcome="C1.f">
+<div class="question-text">Is user and system behaviour baselined and monitored for anomalies that may indicate compromise or insider threat?</div>
+<div class="question-help">UEBA capabilities should establish baselines of normal activity and alert on deviations such as unusual login times, abnormal data access volumes, unexpected process execution, or lateral movement patterns.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1f_1" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1f_1" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1f_1" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1f_1" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1f_1" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1f_1"></div>
+</div>
+<div class="question" data-principle="C1" data-outcome="C1.f">
+<div class="question-text">Is structured threat intelligence actively consumed from relevant sources and operationalised into detection rules and hunting activities?</div>
+<div class="question-help">NCSC advisories, sector-specific ISACs, MITRE ATT&amp;CK-based intelligence, and commercial feeds should be regularly reviewed and translated into concrete detection rules, indicator blocklists, and hunting hypotheses.</div>
+<div class="options">
+<label class="option"><input type="radio" name="caf_C1f_2" value="achieved"><span>Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1f_2" value="partial"><span>Partially Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1f_2" value="not-achieved"><span>Not Achieved</span></label>
+<label class="option"><input type="radio" name="caf_C1f_2" value="na"><span>Not Applicable</span></label>
+</div>
+<button class="ask-consultant-btn" data-question-id="caf_C1f_2" onclick="askOracle(this)">Need help? Ask Oracle</button>
+<div class="consultant-response" id="consultant-caf_C1f_2"></div>
+</div>
+  </div>
+</div>
+</div>
