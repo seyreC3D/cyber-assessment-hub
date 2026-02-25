@@ -494,7 +494,9 @@ const PRINCIPLE_LABELS = {
 function buildCAFRadarChart(scoreMap) {
   const ids = SECTION_IDS;
   const n   = ids.length; // 14
-  const cx  = 200, cy = 200, maxR = 160;
+  // Wider viewBox (520) with centred chart to prevent label clipping
+  const cx  = 260, cy = 210, maxR = 150;
+  const VB_W = 520;
   const BENCHMARK = 0.70; // 70% "Achieved" threshold
 
   function polar(index, ratio) {
@@ -520,18 +522,17 @@ function buildCAFRadarChart(scoreMap) {
   ids.forEach((id, i) => {
     const p = polar(i, 1.0);
     axesSVG += `<line x1="${cx}" y1="${cy}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" stroke="#e8eaed" stroke-width="0.5"/>`;
-    // Label position (pushed slightly outside)
-    const lp = polar(i, 1.18);
+    // Label position — pushed further out so text doesn't overlap polygon
+    const lp = polar(i, 1.24);
     const score = scoreMap[id];
-    const label = id;
     const shortName = PRINCIPLE_LABELS[id] || id;
     const scoreText = score !== null ? ` ${score}%` : '';
-    // Determine text-anchor based on position
+    // Determine text-anchor based on horizontal position
     let anchor = 'middle';
-    if (lp.x < cx - 10) anchor = 'end';
-    else if (lp.x > cx + 10) anchor = 'start';
-    axesSVG += `<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="central" font-size="9" font-weight="600" fill="#1a3a5c">${escapeHtml(label)}</text>`;
-    axesSVG += `<text x="${lp.x.toFixed(1)}" y="${(lp.y + 11).toFixed(1)}" text-anchor="${anchor}" dominant-baseline="central" font-size="7.5" fill="#5a6a7a">${escapeHtml(shortName)}${escapeHtml(scoreText)}</text>`;
+    if (lp.x < cx - 12) anchor = 'end';
+    else if (lp.x > cx + 12) anchor = 'start';
+    axesSVG += `<text x="${lp.x.toFixed(1)}" y="${lp.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="central" font-size="9" font-weight="600" fill="#1a3a5c">${escapeHtml(id)}</text>`;
+    axesSVG += `<text x="${lp.x.toFixed(1)}" y="${(lp.y + 12).toFixed(1)}" text-anchor="${anchor}" dominant-baseline="central" font-size="7.5" fill="#5a6a7a">${escapeHtml(shortName)}${escapeHtml(scoreText)}</text>`;
   });
 
   // Benchmark polygon (70% threshold)
@@ -559,18 +560,18 @@ function buildCAFRadarChart(scoreMap) {
     dotsSVG += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.5" fill="${color}" stroke="#fff" stroke-width="1.2"/>`;
   });
 
-  // Legend
-  const legendY = cy + maxR + 32;
+  // Legend (centred below chart)
+  const legendY = cy + maxR + 40;
   const legendSVG = `
-    <line x1="${cx - 80}" y1="${legendY}" x2="${cx - 60}" y2="${legendY}" stroke="#00a878" stroke-width="2.2"/>
-    <text x="${cx - 56}" y="${legendY}" dominant-baseline="central" font-size="8" fill="#5a6a7a">Your score</text>
+    <line x1="${cx - 90}" y1="${legendY}" x2="${cx - 70}" y2="${legendY}" stroke="#00a878" stroke-width="2.2"/>
+    <text x="${cx - 66}" y="${legendY}" dominant-baseline="central" font-size="8" fill="#5a6a7a">Your score</text>
     <line x1="${cx + 10}" y1="${legendY}" x2="${cx + 30}" y2="${legendY}" stroke="#c0392b" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.6"/>
     <text x="${cx + 34}" y="${legendY}" dominant-baseline="central" font-size="8" fill="#5a6a7a">70% Achieved threshold</text>
   `;
 
   const wrapper = document.createElement('div');
   wrapper.className = 'caf-radar-wrapper';
-  wrapper.innerHTML = `<svg viewBox="0 0 400 ${legendY + 16}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto;">
+  wrapper.innerHTML = `<svg viewBox="0 0 ${VB_W} ${legendY + 20}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;">
     ${gridSVG}${axesSVG}${benchSVG}${dataSVG}${dotsSVG}${legendSVG}
   </svg>`;
   return wrapper;
