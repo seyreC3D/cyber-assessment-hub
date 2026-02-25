@@ -8,8 +8,9 @@
 </head>
 <body>
 <div class="container">
-<div class="uat-banner">&#9888;&#65039;  UAT &mdash; Pre-production  &#9888;&#65039;</div>
 <div class="header">
+  <div class="user-info" id="user-info"></div>
+  <button class="logout-button" id="logout-button" onclick="logout()">Logout</button>
   <h1>CAF Self-Assessment Tool Powered by Cyber 3D</h1>
   <div class="subtitle-row">
     <p>NCSC Cyber Assessment Framework v4.0</p>
@@ -1384,6 +1385,58 @@
 </div>
 
 <script src="caf-assessment.js"></script>
+
+<!-- Firebase Authentication -->
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import { firebaseConfig } from './firebase-config.js';
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let hasCheckedAuth = false;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            hasCheckedAuth = true;
+            const userInfo = document.getElementById('user-info');
+            if (userInfo) {
+                const displayName = user.displayName ||
+                    localStorage.getItem('userName') ||
+                    user.email.split('@')[0];
+                userInfo.textContent = displayName;
+            }
+            localStorage.removeItem('firebaseAuthComplete');
+        } else {
+            if (!hasCheckedAuth) {
+                hasCheckedAuth = true;
+                setTimeout(() => {
+                    if (!auth.currentUser) {
+                        localStorage.removeItem('firebaseAuthComplete');
+                        window.location.href = 'login.html?redirect=caf-assessment';
+                    }
+                }, 1000);
+            } else {
+                window.location.href = 'login.html?redirect=caf-assessment';
+            }
+        }
+    }, () => {
+        window.location.href = 'login.html?redirect=caf-assessment';
+    });
+
+    window.logout = async function () {
+        if (confirm('Are you sure you want to logout?')) {
+            try {
+                await signOut(auth);
+                localStorage.clear();
+                window.location.href = 'index.html';
+            } catch (error) {
+                alert('Error logging out: ' + error.message);
+            }
+        }
+    };
+</script>
 </div><!-- end container -->
 </body>
 </html>

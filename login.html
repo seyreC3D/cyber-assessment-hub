@@ -658,7 +658,7 @@
         const googleProvider = new GoogleAuthProvider();
 
         // Redirect target — read from ?redirect= param, whitelist pages
-        const ALLOWED_REDIRECTS = { assessment: 'assessment.html' };
+        const ALLOWED_REDIRECTS = { assessment: 'assessment.html', 'caf-assessment': 'caf-assessment.html' };
         function getRedirectTarget() {
             const param = new URLSearchParams(window.location.search).get('redirect');
             return (param && ALLOWED_REDIRECTS[param]) || 'assessment.html';
