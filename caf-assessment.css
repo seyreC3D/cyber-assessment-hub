@@ -648,7 +648,7 @@ body {
   .results-header { display: none !important; }
 
   /* Radar chart sizing */
-  .caf-radar-wrapper svg { width: 100%; max-width: 420px; height: auto; }
+  .caf-radar-wrapper svg { width: 100%; max-width: 480px; height: auto; }
 
   /* Grid layout for print */
   .results-grid { grid-template-columns: repeat(7, 1fr) !important; gap: 8px !important; }
