@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Cyber 3D</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,71 +15,157 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #028090 0%, #00A896 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0b1a2b;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow-x: hidden;
         }
 
+        /* ── Animated background (matches landing) ── */
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(2,128,144,.35) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(0,168,150,.2) 0%, transparent 60%),
+                linear-gradient(170deg, #0b1a2b 0%, #122a40 50%, #0e2236 100%);
+        }
+
+        .bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(0,168,150,.07) 0%, transparent 50%),
+                radial-gradient(circle at 75% 70%, rgba(2,128,144,.06) 0%, transparent 40%);
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes drift {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-30px, 20px) scale(1.05); }
+        }
+
+        .bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* ── Login card ── */
         .login-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,.05);
+            border: 1px solid rgba(255,255,255,.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
             width: 100%;
             max-width: 450px;
             overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0,0,0,.35);
+            animation: fadeUp .7s ease-out;
         }
 
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Header ── */
         .login-header {
-            background: linear-gradient(135deg, #028090 0%, #00A896 100%);
-            color: white;
-            padding: 40px 30px;
+            padding: 36px 30px 28px;
             text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .back-link {
+            color: rgba(255,255,255,.45);
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 18px;
+            transition: color .2s;
+            font-weight: 500;
+        }
+
+        .back-link:hover { color: #00d4aa; }
+
+        .logo-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #028090 0%, #00A896 100%);
+            box-shadow: 0 6px 24px rgba(0,168,150,.3);
+            margin-bottom: 16px;
+        }
+
+        .logo-mark svg {
+            width: 30px;
+            height: 30px;
         }
 
         .login-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .login-header .icon {
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #ffffff 0%, #a0d8d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .login-header p {
-            font-size: 16px;
-            opacity: 0.95;
+            font-size: 15px;
+            color: rgba(255,255,255,.5);
         }
 
+        /* ── Tabs ── */
         .tab-container {
             display: flex;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 1px solid rgba(255,255,255,.06);
         }
 
         .tab {
             flex: 1;
-            padding: 15px;
+            padding: 14px;
             text-align: center;
-            background: #f5f5f5;
+            background: transparent;
             cursor: pointer;
             font-weight: 600;
-            color: #666;
+            font-size: 14px;
+            color: rgba(255,255,255,.4);
             border: none;
-            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            transition: all .25s ease;
+            font-family: inherit;
         }
+
+        .tab:hover { color: rgba(255,255,255,.65); }
 
         .tab.active {
-            background: white;
-            color: #028090;
-            border-bottom: 3px solid #028090;
+            color: #00d4aa;
+            border-bottom-color: #00d4aa;
         }
 
+        /* ── Form content ── */
         .login-content {
-            padding: 40px 30px;
+            padding: 32px 30px;
         }
 
         .form-section {
@@ -88,34 +177,38 @@
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 22px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
             font-weight: 600;
-            color: #333;
-            font-size: 14px;
+            color: rgba(255,255,255,.7);
+            font-size: 13px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            padding: 13px 14px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 10px;
+            font-size: 15px;
+            color: #fff;
+            transition: all .25s ease;
+            font-family: inherit;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #028090;
-            box-shadow: 0 0 0 3px rgba(2, 128, 144, 0.1);
+            border-color: rgba(0,212,170,.5);
+            box-shadow: 0 0 0 3px rgba(0,212,170,.1);
+            background: rgba(255,255,255,.08);
         }
 
         .form-group input::placeholder {
-            color: #999;
+            color: rgba(255,255,255,.25);
         }
 
         .password-toggle {
@@ -135,20 +228,21 @@
             border: none;
             cursor: pointer;
             font-size: 18px;
-            color: #666;
+            color: rgba(255,255,255,.4);
             padding: 5px;
+            transition: color .2s;
         }
 
         .password-toggle button:hover {
-            color: #028090;
+            color: #00d4aa;
         }
 
         .remember-forgot {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            font-size: 14px;
+            margin-bottom: 24px;
+            font-size: 13px;
         }
 
         .remember-me {
@@ -158,44 +252,49 @@
         }
 
         .remember-me input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
+            accent-color: #00d4aa;
         }
 
         .remember-me label {
             cursor: pointer;
-            color: #666;
-            font-weight: normal;
+            color: rgba(255,255,255,.5);
+            font-weight: 400;
         }
 
         .forgot-password {
-            color: #028090;
+            color: #00d4aa;
             text-decoration: none;
             font-weight: 600;
+            transition: color .2s;
         }
 
         .forgot-password:hover {
-            text-decoration: underline;
+            color: #33e6c0;
         }
 
+        /* ── Buttons ── */
         .auth-button {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: linear-gradient(135deg, #028090 0%, #00A896 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 18px;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all .25s ease;
             margin-bottom: 20px;
+            font-family: inherit;
+            box-shadow: 0 4px 16px rgba(0,168,150,.25);
         }
 
         .auth-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(2, 128, 144, 0.3);
+            box-shadow: 0 8px 28px rgba(0,168,150,.4);
         }
 
         .auth-button:active {
@@ -203,17 +302,19 @@
         }
 
         .auth-button:disabled {
-            opacity: 0.6;
+            opacity: .5;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
+        /* ── Messages ── */
         .error-message {
-            background: #fee;
-            border: 2px solid #fcc;
-            color: #c33;
-            padding: 12px;
-            border-radius: 8px;
+            background: rgba(220,53,69,.12);
+            border: 1px solid rgba(220,53,69,.3);
+            color: #ff8a95;
+            padding: 12px 14px;
+            border-radius: 10px;
             margin-bottom: 20px;
             display: none;
             font-size: 14px;
@@ -224,11 +325,11 @@
         }
 
         .success-message {
-            background: #d4edda;
-            border: 2px solid #c3e6cb;
-            color: #155724;
-            padding: 12px;
-            border-radius: 8px;
+            background: rgba(0,212,170,.1);
+            border: 1px solid rgba(0,212,170,.25);
+            color: #00d4aa;
+            padding: 12px 14px;
+            border-radius: 10px;
             margin-bottom: 20px;
             display: none;
             font-size: 14px;
@@ -238,9 +339,10 @@
             display: block;
         }
 
+        /* ── Divider ── */
         .divider {
             text-align: center;
-            margin: 25px 0;
+            margin: 24px 0;
             position: relative;
         }
 
@@ -251,53 +353,70 @@
             top: 50%;
             width: 100%;
             height: 1px;
-            background: #e0e0e0;
+            background: rgba(255,255,255,.08);
         }
 
         .divider span {
-            background: white;
-            padding: 0 15px;
+            background: transparent;
+            padding: 0 14px;
             position: relative;
-            color: #999;
-            font-size: 14px;
+            color: rgba(255,255,255,.3);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .5px;
         }
 
+        /* Semi-opaque pill behind OR text to mask the line */
+        .divider span::before {
+            content: '';
+            position: absolute;
+            inset: -2px -4px;
+            background: #122a40;
+            border-radius: 6px;
+            z-index: -1;
+        }
+
+        /* ── Google button ── */
         .google-button {
             width: 100%;
-            padding: 14px;
-            background: white;
-            color: #333;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 13px;
+            background: rgba(255,255,255,.06);
+            color: rgba(255,255,255,.8);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all .25s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            font-family: inherit;
         }
 
         .google-button:hover {
-            border-color: #028090;
-            background: #f8f9fa;
+            border-color: rgba(255,255,255,.25);
+            background: rgba(255,255,255,.1);
         }
 
         .password-requirements {
             font-size: 12px;
-            color: #666;
+            color: rgba(255,255,255,.35);
             margin-top: 8px;
             line-height: 1.5;
         }
 
+        /* ── MFA Modals ── */
         .mfa-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0,0,0,.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -309,25 +428,29 @@
         }
 
         .mfa-modal {
-            background: white;
-            border-radius: 16px;
+            background: rgba(18,42,64,.95);
+            border: 1px solid rgba(255,255,255,.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
             padding: 30px;
             width: 90%;
             max-width: 420px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 24px 80px rgba(0,0,0,.4);
         }
 
         .mfa-modal h2 {
-            color: #028090;
+            color: #00d4aa;
             margin-bottom: 10px;
             font-size: 22px;
+            font-weight: 700;
         }
 
         .mfa-modal p {
-            color: #666;
+            color: rgba(255,255,255,.55);
             margin-bottom: 20px;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .mfa-modal .form-group {
@@ -338,30 +461,39 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #333;
-            font-size: 14px;
+            color: rgba(255,255,255,.7);
+            font-size: 13px;
         }
 
         .mfa-modal .form-group input {
             width: 100%;
             padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 10px;
             font-size: 18px;
             text-align: center;
             letter-spacing: 8px;
-            transition: all 0.3s ease;
+            color: #fff;
+            transition: all .25s ease;
+            font-family: inherit;
         }
 
         .mfa-modal .form-group input[type="tel"] {
             letter-spacing: normal;
             text-align: left;
+            font-size: 15px;
         }
 
         .mfa-modal .form-group input:focus {
             outline: none;
-            border-color: #028090;
-            box-shadow: 0 0 0 3px rgba(2, 128, 144, 0.1);
+            border-color: rgba(0,212,170,.5);
+            box-shadow: 0 0 0 3px rgba(0,212,170,.1);
+            background: rgba(255,255,255,.08);
+        }
+
+        .mfa-modal .form-group input::placeholder {
+            color: rgba(255,255,255,.25);
         }
 
         .mfa-button-group {
@@ -376,50 +508,61 @@
 
         .mfa-cancel-button {
             flex: 1;
-            padding: 16px;
-            background: #f5f5f5;
-            color: #666;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 14px;
+            background: rgba(255,255,255,.06);
+            color: rgba(255,255,255,.6);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all .25s ease;
+            font-family: inherit;
         }
 
         .mfa-cancel-button:hover {
-            background: #e0e0e0;
+            background: rgba(255,255,255,.1);
+            color: rgba(255,255,255,.8);
         }
 
         .mfa-phone-hint {
-            background: #e8f5e9;
-            border-radius: 8px;
+            background: rgba(0,212,170,.1);
+            border: 1px solid rgba(0,212,170,.2);
+            border-radius: 10px;
             padding: 12px;
             margin-bottom: 20px;
             font-size: 14px;
-            color: #2e7d32;
+            color: #00d4aa;
         }
 
+        /* ── Responsive ── */
         @media (max-width: 480px) {
             .login-header {
-                padding: 30px 20px;
+                padding: 28px 20px 22px;
             }
 
             .login-header h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
 
             .login-content {
-                padding: 30px 20px;
+                padding: 24px 20px;
             }
         }
     </style>
 </head>
 <body>
+    <div class="bg"></div>
+
     <div class="login-container">
         <div class="login-header">
-            <a href="index.html" style="color: rgba(255,255,255,0.85); font-size: 13px; text-decoration: none; display: inline-block; margin-bottom: 12px;">&larr; Back to home</a>
-            <div class="icon">&#x1F6E1;&#xFE0F;</div>
+            <a href="index.html" class="back-link">&larr; Back to home</a>
+            <div class="logo-mark">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7l-9-5z" fill="white"/>
+                    <path d="M10 15.5l-3.5-3.5 1.41-1.41L10 12.67l5.59-5.59L17 8.5l-7 7z" fill="#028090"/>
+                </svg>
+            </div>
             <h1>Cyber 3D</h1>
             <p>Sign in to continue</p>
         </div>
@@ -438,10 +581,10 @@
                 <form id="login" onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label for="login-email">Email Address</label>
-                        <input 
-                            type="email" 
-                            id="login-email" 
-                            name="email" 
+                        <input
+                            type="email"
+                            id="login-email"
+                            name="email"
                             placeholder="Enter your email"
                             required
                             autocomplete="username"
@@ -451,16 +594,16 @@
                     <div class="form-group">
                         <label for="login-password">Password</label>
                         <div class="password-toggle">
-                            <input 
-                                type="password" 
-                                id="login-password" 
-                                name="password" 
+                            <input
+                                type="password"
+                                id="login-password"
+                                name="password"
                                 placeholder="Enter your password"
                                 required
                                 autocomplete="current-password"
                             />
                             <button type="button" onclick="togglePassword('login-password', this)" aria-label="Toggle password visibility">
-                                👁️
+                                &#x1F441;&#xFE0F;
                             </button>
                         </div>
                     </div>
@@ -498,10 +641,10 @@
                 <form id="register" onsubmit="handleRegister(event)">
                     <div class="form-group">
                         <label for="register-name">Full Name</label>
-                        <input 
-                            type="text" 
-                            id="register-name" 
-                            name="name" 
+                        <input
+                            type="text"
+                            id="register-name"
+                            name="name"
                             placeholder="Enter your full name"
                             required
                         />
@@ -509,10 +652,10 @@
 
                     <div class="form-group">
                         <label for="register-email">Email Address</label>
-                        <input 
-                            type="email" 
-                            id="register-email" 
-                            name="email" 
+                        <input
+                            type="email"
+                            id="register-email"
+                            name="email"
                             placeholder="Enter your email"
                             required
                             autocomplete="username"
@@ -522,17 +665,17 @@
                     <div class="form-group">
                         <label for="register-password">Password</label>
                         <div class="password-toggle">
-                            <input 
-                                type="password" 
-                                id="register-password" 
-                                name="password" 
+                            <input
+                                type="password"
+                                id="register-password"
+                                name="password"
                                 placeholder="Create a password"
                                 required
                                 autocomplete="new-password"
                                 minlength="6"
                             />
                             <button type="button" onclick="togglePassword('register-password', this)" aria-label="Toggle password visibility">
-                                👁️
+                                &#x1F441;&#xFE0F;
                             </button>
                         </div>
                         <div class="password-requirements">
@@ -543,16 +686,16 @@
                     <div class="form-group">
                         <label for="register-confirm-password">Confirm Password</label>
                         <div class="password-toggle">
-                            <input 
-                                type="password" 
-                                id="register-confirm-password" 
-                                name="confirm-password" 
+                            <input
+                                type="password"
+                                id="register-confirm-password"
+                                name="confirm-password"
                                 placeholder="Confirm your password"
                                 required
                                 autocomplete="new-password"
                             />
                             <button type="button" onclick="togglePassword('register-confirm-password', this)" aria-label="Toggle password visibility">
-                                👁️
+                                &#x1F441;&#xFE0F;
                             </button>
                         </div>
                     </div>
@@ -747,7 +890,7 @@
                 await sendEmailVerification(userCredential.user);
                 console.log("Registration successful! Verification email sent.");
 
-                button.textContent = '✓ Account created!';
+                button.textContent = '\u2713 Account created!';
                 button.style.background = '#28a745';
 
                 localStorage.setItem('userEmail', userCredential.user.email);
@@ -795,7 +938,7 @@
             // Update button state if visible
             const loginBtn = document.getElementById('login-button');
             if (loginBtn) {
-                loginBtn.textContent = '✓ Success!';
+                loginBtn.textContent = '\u2713 Success!';
                 loginBtn.style.background = '#28a745';
             }
 
@@ -1014,10 +1157,10 @@
         async function showPasswordReset(event) {
             event.preventDefault();
             hideMessages();
-            
+
             const email = prompt('Enter your email address to reset your password:');
             if (!email) return;
-            
+
             try {
                 await sendPasswordResetEmail(auth, email);
                 showSuccess('Password reset email sent! Check your inbox.');
@@ -1070,11 +1213,11 @@
             // Update tabs
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             // Update forms
             document.querySelectorAll('.form-section').forEach(f => f.classList.remove('active'));
             document.getElementById(tab + '-form').classList.add('active');
-            
+
             // Clear messages
             document.getElementById('error-message').classList.remove('show');
             document.getElementById('success-message').classList.remove('show');
@@ -1085,7 +1228,7 @@
             const input = document.getElementById(inputId);
             const type = input.type === 'password' ? 'text' : 'password';
             input.type = type;
-            button.textContent = type === 'password' ? '👁️' : '🙈';
+            button.textContent = type === 'password' ? '\u{1F441}\uFE0F' : '\u{1F648}';
         }
     </script>
 </body>
