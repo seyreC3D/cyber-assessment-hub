@@ -299,7 +299,7 @@ async function runAnalysis() {
     // Fallback local analysis
     displayResults(buildFallbackResult(scoreMap), scoreMap);
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = 'Analyse with Claude \u2192'; }
+    if (btn) { btn.disabled = false; btn.textContent = 'Analyse with Oracle \u2192'; }
   }
 }
 
