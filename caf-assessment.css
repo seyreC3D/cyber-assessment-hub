@@ -60,6 +60,58 @@ body {
 }
 .how-it-works-link:hover { background: rgba(255,255,255,.25); }
 
+/* ── SAVE PROGRESS BUTTON (header) ── */
+.save-progress-btn {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.35);
+  color: #fff;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.save-progress-btn:hover { background: rgba(255,255,255,.25); }
+.save-progress-btn.saving {
+  background: rgba(39,174,96,.35);
+  border-color: rgba(39,174,96,.6);
+  pointer-events: none;
+}
+.save-progress-btn.saved {
+  background: rgba(39,174,96,.25);
+  border-color: rgba(39,174,96,.5);
+}
+.save-icon { font-size: .9rem; }
+
+/* Save notice (below subtitle row) */
+.save-notice {
+  margin-top: 6px;
+  font-size: .72rem;
+  color: rgba(255,255,255,.55);
+  transition: color .3s;
+}
+.save-notice.just-saved { color: rgba(39,174,96,.95); }
+
+/* ── SAVE STATUS (bottom bar) ── */
+.save-status-icon {
+  display: inline-block;
+  font-size: .55rem;
+  vertical-align: middle;
+  margin-right: 4px;
+  color: var(--success);
+  transition: color .2s;
+}
+.save-status-icon.unsaved { color: var(--partial); }
+.save-timestamp {
+  font-size: .72rem;
+  color: var(--text-muted);
+  opacity: .7;
+  margin-left: 6px;
+}
+
 /* ── WELCOME MODAL ── */
 .welcome-overlay {
   position: fixed; inset: 0;
@@ -502,12 +554,23 @@ body {
   .header { padding: 16px 20px; }
   .mobile-bottom-bar {
     display: flex;
+    gap: 10px;
     position: fixed;
     bottom: 0; left: 0; right: 0;
     padding: 12px 16px;
     background: var(--card);
     border-top: 1px solid var(--border);
     z-index: 200;
+  }
+  .mobile-save-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 13px 16px;
+    border-radius: 8px;
+    font-size: .9rem;
+    font-weight: 500;
+    cursor: pointer;
   }
   .mobile-analyze-btn {
     flex: 1;

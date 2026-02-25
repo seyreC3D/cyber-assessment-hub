@@ -80,7 +80,7 @@ function collapseSection(id) {
 }
 
 // ─────────────────────────────────────────
-//  Auto-save
+//  Auto-save & manual save
 // ─────────────────────────────────────────
 let saveTimer = null;
 function attachAutoSave() {
@@ -90,10 +90,10 @@ function attachAutoSave() {
 }
 function scheduleSave() {
   clearTimeout(saveTimer);
-  document.getElementById('save-status').textContent = 'Saving\u2026';
+  updateSaveUI('saving');
   saveTimer = setTimeout(() => {
     saveState();
-    document.getElementById('save-status').textContent = 'All changes saved';
+    updateSaveUI('saved');
   }, 800);
 }
 function saveState() {
@@ -102,6 +102,7 @@ function saveState() {
     state[el.name] = el.value;
   });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  localStorage.setItem(STORAGE_KEY + '_ts', new Date().toISOString());
   updateProgress();
 }
 function loadSaved() {
@@ -114,17 +115,79 @@ function loadSaved() {
       if (el) el.checked = true;
     });
   } catch (e) { /* ignore corrupt state */ }
+  // Show last saved timestamp
+  const ts = localStorage.getItem(STORAGE_KEY + '_ts');
+  if (ts) updateSaveUI('restored', ts);
 }
+
+function manualSave() {
+  const btn = document.getElementById('save-progress-btn');
+  btn.classList.add('saving');
+  btn.innerHTML = '<span class="save-icon">&#9203;</span> Saving\u2026';
+  saveState();
+  setTimeout(() => {
+    btn.classList.remove('saving');
+    btn.classList.add('saved');
+    btn.innerHTML = '<span class="save-icon">&#10003;</span> Saved!';
+    updateSaveUI('saved');
+    setTimeout(() => {
+      btn.classList.remove('saved');
+      btn.innerHTML = '<span class="save-icon" id="save-icon">&#128190;</span> Save Progress';
+    }, 2000);
+  }, 400);
+}
+
+function formatSaveTime(isoStr) {
+  try {
+    const d = new Date(isoStr || Date.now());
+    return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  } catch (e) { return ''; }
+}
+
+function updateSaveUI(state, timestamp) {
+  const statusText = document.getElementById('save-status-text');
+  const statusIcon = document.getElementById('save-status-icon');
+  const tsEl       = document.getElementById('save-timestamp');
+  const notice     = document.getElementById('save-notice');
+  const noticeText = document.getElementById('save-notice-text');
+
+  const now = formatSaveTime(timestamp);
+
+  if (state === 'saving') {
+    if (statusText) statusText.textContent = 'Saving\u2026';
+    if (statusIcon) { statusIcon.textContent = '\u25cf'; statusIcon.classList.add('unsaved'); }
+    if (notice) notice.classList.remove('just-saved');
+  } else if (state === 'saved') {
+    const time = formatSaveTime();
+    if (statusText) statusText.textContent = 'All changes saved';
+    if (statusIcon) { statusIcon.textContent = '\u25cf'; statusIcon.classList.remove('unsaved'); }
+    if (tsEl) tsEl.textContent = 'at ' + time;
+    if (noticeText) noticeText.textContent = 'Progress saved to your browser at ' + time;
+    if (notice) { notice.classList.add('just-saved'); setTimeout(() => notice.classList.remove('just-saved'), 2500); }
+  } else if (state === 'restored') {
+    if (statusText) statusText.textContent = 'Previous session restored';
+    if (statusIcon) { statusIcon.textContent = '\u25cf'; statusIcon.classList.remove('unsaved'); }
+    if (tsEl && now) tsEl.textContent = 'last saved ' + now;
+    if (noticeText && now) noticeText.textContent = 'Previous progress restored \u2014 last saved at ' + now;
+  } else if (state === 'cleared') {
+    if (statusText) statusText.textContent = 'Cleared';
+    if (statusIcon) { statusIcon.textContent = '\u25cb'; statusIcon.classList.add('unsaved'); }
+    if (tsEl) tsEl.textContent = '';
+    if (noticeText) noticeText.textContent = 'Auto-saved to your browser';
+  }
+}
+
 function clearAll() {
   if (!confirm('Clear all answers? This cannot be undone.')) return;
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(STORAGE_KEY + '_ts');
   document.querySelectorAll('input[type="radio"]:checked').forEach(el => { el.checked = false; });
   document.querySelectorAll('.consultant-response').forEach(el => {
     el.classList.remove('visible');
     el.textContent = '';
   });
   updateProgress();
-  document.getElementById('save-status').textContent = 'Cleared';
+  updateSaveUI('cleared');
 }
 
 // ─────────────────────────────────────────
