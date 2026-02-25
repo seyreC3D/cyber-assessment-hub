@@ -205,14 +205,13 @@ Provide concise, practical guidance (3-5 bullet points) to help this organisatio
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-opus-4-6',
-        max_tokens: 400,
-        messages: [{ role: 'user', content: prompt }]
+        prompt: prompt,
+        max_tokens: 400
       })
     });
     if (!resp.ok) throw new Error('API ' + resp.status);
     const data = await resp.json();
-    const text = data.content?.[0]?.text || data.result || 'No response received.';
+    const text = data.text || data.content?.[0]?.text || 'No response received.';
     responseDiv.textContent = '';
     // Render bullet points as separate lines
     text.split('\n').forEach(line => {
@@ -280,14 +279,13 @@ async function runAnalysis() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-opus-4-6',
-        max_tokens: 3000,
-        messages: [{ role: 'user', content: prompt }]
+        prompt: prompt,
+        max_tokens: 3000
       })
     });
     if (!resp.ok) throw new Error('API ' + resp.status);
     const data = await resp.json();
-    const text = data.content?.[0]?.text || data.result || '';
+    const text = data.text || data.content?.[0]?.text || '';
     let parsed;
     try {
       const jsonMatch = text.match(/\{[\s\S]*\}/);
