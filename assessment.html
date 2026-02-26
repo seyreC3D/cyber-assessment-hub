@@ -814,7 +814,7 @@
                 'Please explain the Cyber Essentials requirement related to this question. ' +
                 'What does the standard require, why does it matter, and how can a small business comply?';
 
-            fetch('https://cyber-essentials-checker.vercel.app/api/analyze', {
+            fetch('/api/analyze', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
