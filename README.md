@@ -2,28 +2,15 @@
 
 AI-powered, interactive assessment tools to evaluate your organisation's readiness for UK Cyber Essentials (v3.3) certification and the NCSC Cyber Assessment Framework (CAF v4.0).
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![GitHub Pages](https://img.shields.io/badge/demo-live-brightgreen)](https://yourusername.github.io/cyber-essentials-checker/)
+#######This repository is source-available. It is NOT open source.
+See LICENSE for details############
+
 
 ## 🚀 Quick Start
 
 **Try it now:** [Live Demo](https://yourusername.github.io/cyber-essentials-checker/)
 
-**Or run locally:**
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/cyber-essentials-checker.git
 
-# Open in browser
-cd cyber-essentials-checker
-open index.html  # macOS
-# or
-start index.html  # Windows
-# or
-xdg-open index.html  # Linux
-```
-
-No installation, no dependencies, no backend required!
 
 ## 📋 Features
 
