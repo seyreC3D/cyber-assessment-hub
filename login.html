@@ -780,14 +780,11 @@
             GoogleAuthProvider,
             sendPasswordResetEmail,
             setPersistence,
-            browserSessionPersistence,
             browserLocalPersistence,
             updateProfile,
-            sendEmailVerification,
             multiFactor,
             getMultiFactorResolver,
-            TotpMultiFactorGenerator,
-            TotpSecret
+            TotpMultiFactorGenerator
         } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { firebaseConfig } from './firebase-config.js';
 
@@ -879,10 +876,6 @@
                     displayName: name
                 });
 
-                // Send email verification
-                await sendEmailVerification(userCredential.user);
-                console.log("Registration successful! Verification email sent.");
-
                 button.textContent = '\u2713 Account created!';
                 button.style.background = '#28a745';
 
@@ -890,7 +883,7 @@
                 localStorage.setItem('userName', name);
                 localStorage.setItem('firebaseAuthComplete', 'true');
 
-                // Offer MFA enrollment before redirecting
+                // Offer TOTP MFA enrollment
                 showSuccess('Account created! You can now enable two-factor authentication for extra security.');
                 showMFAEnrollment();
 
@@ -933,6 +926,13 @@
             if (loginBtn) {
                 loginBtn.textContent = '\u2713 Success!';
                 loginBtn.style.background = '#28a745';
+            }
+
+            // If TOTP not yet enrolled, offer enrollment
+            const enrolledFactors = multiFactor(user).enrolledFactors;
+            if (enrolledFactors.length === 0) {
+                showMFAEnrollment();
+                return;
             }
 
             setTimeout(() => {
@@ -1018,6 +1018,7 @@
 
             try {
                 const user = auth.currentUser;
+
                 const multiFactorSession = await multiFactor(user).getSession();
                 totpSecret = await TotpMultiFactorGenerator.generateSecret(multiFactorSession);
 
@@ -1026,7 +1027,11 @@
                 const otpauthUri = totpSecret.generateQrCodeUrl(accountName, 'Cyber Assessment Hub');
 
                 const qrCanvas = document.getElementById('totp-qr-canvas');
-                QRious && new QRious({ element: qrCanvas, value: otpauthUri, size: 200, level: 'M' });
+                try {
+                    new QRious({ element: qrCanvas, value: otpauthUri, size: 200, level: 'M' });
+                } catch (qrErr) {
+                    console.warn('QR code rendering failed:', qrErr);
+                }
 
                 // Show secret key for manual entry
                 document.getElementById('totp-secret-key').textContent = totpSecret.secretKey;
