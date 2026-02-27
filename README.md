@@ -116,10 +116,20 @@ No installation, no dependencies, no backend required!
 ```
 
 **Tech Stack:**
-- Pure HTML/CSS/JavaScript (no frameworks)
-- Firebase Authentication (login / session management)
-- Server-side API proxy for Claude AI analysis
-- LocalStorage for auto-save and progress persistence
+
+| Layer | Technology | Version / Detail |
+|-------|-----------|-----------------|
+| **Frontend** | HTML5 / CSS3 / Vanilla JavaScript | No frameworks, no build step |
+| **Fonts** | Google Fonts — Inter | Weights 400–800, loaded via CDN |
+| **Authentication** | Firebase Auth SDK (ESM) | v10.7.1, loaded from `gstatic.com` CDN |
+| **Auth methods** | Email/password, Google Sign-In, TOTP MFA | Via Firebase `multiFactor` + `TotpMultiFactorGenerator` |
+| **QR codes** | QRious | v4.0.2, used for TOTP MFA enrolment QR generation |
+| **AI analysis** | Anthropic Claude API | Messages API v2023-06-01; models: `claude-sonnet-4-5-20250929`, `claude-haiku-4-5-20251001` |
+| **API proxy** | Vercel Serverless Function (Node.js ≥ 18) | `api/analyze.js` — keeps `ANTHROPIC_API_KEY` server-side |
+| **Hosting (frontend)** | GitHub Pages | Static files served from `seyrec3d.github.io/cyber-assessment-hub` |
+| **Hosting (API)** | Vercel | `cyber-assessment-hub.vercel.app/api/*` with CORS headers |
+| **Persistence** | Browser localStorage | Auto-save every 1 s; keys listed in CLAUDE.md |
+| **PDF export** | Native `window.print()` | Custom `@media print` CSS for clean output |
 
 ## 📦 What's Included
 
