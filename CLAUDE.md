@@ -46,11 +46,11 @@ api/hello.js            Health-check endpoint (returns { ok: true })
 
 1. **Landing page** — `index.html` is a public landing page with 3 service cards. Clicking the free CE card navigates to `login.html?redirect=assessment`. Clicking the CAF card navigates to the CAF assessment (`caf-assessment.html`).
 
-2. **Auth** — `login.html` handles login/registration/MFA via Firebase Auth SDK (loaded from CDN). Reads `?redirect=` param (whitelisted) to determine post-auth destination. On success, redirects to the target page.
+2. **Auth** — `login.html` handles login/registration/MFA via Firebase Auth SDK v10.7.1 (loaded as ESM from CDN, pinned in three HTML files). Reads `?redirect=` param against `ALLOWED_REDIRECTS` whitelist (`assessment` → `assessment.html`, `caf-assessment` → `caf-assessment.html`). Adding a new protected page requires updating this map in `login.html`. Supports email/password and Google Sign-In, with optional TOTP MFA enrollment.
 
 3. **Assessment** — 6 core Cyber Essentials controls (firewalls, secure config, updates, access control, malware, scope) plus an optional 7th supply chain section. Each control has multiple-choice questions (radio buttons with `data-control` attribute mapping to controls 1-6) and required free-text fields.
 
-4. **Conditional branching** — Some questions are shown/hidden based on parent answers. Hidden question answers are auto-cleared to avoid stale scoring.
+4. **Conditional branching** — Questions use `data-show-if="<radioName>:<value1>|<value2>"` to show/hide based on parent answers. Hidden question answers are auto-cleared by `updateConditionalQuestions()` to avoid stale scoring. Five conditional questions exist (triggered by `q1_3`, `q2_2`, `q3_1`, `q4_3`, `q6_3`).
 
 5. **Supply chain** — Optional vendor assessment module. Vendors are added dynamically; each gets 8 weighted security questions rendered in `.vendor-question` divs. Vendor radios do NOT have `data-control` attributes (important: `collectResponses()` must skip them).
 
@@ -64,13 +64,29 @@ api/hello.js            Health-check endpoint (returns { ok: true })
 
 9. **PDF export** — `printToPDF()` prompts for company name, adds header/appendix, then calls `window.print()`.
 
-10. **CAF assessment** — `caf-assessment.html/js/css` provides a separate assessment flow for the NCSC Cyber Assessment Framework. Uses the same Vercel API proxy for analysis.
+10. **CAF assessment** — `caf-assessment.html/js/css` provides a separate assessment flow for the NCSC Cyber Assessment Framework (14 principles, 83 questions). Uses the same Vercel API proxy for analysis. Also has a JSON export feature (`exportJSON()`).
 
 ### Key data structures
 
 - **Responses object** (`collectResponses()`): `{ controls: { firewalls: {}, secureConfig: {}, updates: {}, accessControl: {}, malware: {}, scope: {} }, textInputs: { ... } }`
 - **Analysis result**: `{ overallStatus, readinessScore, controlScores, criticalIssues[], warnings[], strengths[], nextSteps[], summary, timeline }`
-- **Vendors array**: Each vendor has `{ id, name, accessLevel, questions: {} }` with risk calculated via weighted scoring and access-level multipliers.
+- **Vendors array**: Each vendor has `{ id, name, accessLevel, questions: {} }` with risk calculated via weighted scoring and access-level multipliers. Vendor risk scoring: 8 questions with weights 1-3, `pass` = full weight, `partial` = half, `fail`/`unsure` = 0. Raw score is scaled to 0-100, then adjusted by access-level multiplier (`system: 1.5`, `network: 1.3`, `data: 1.2`, `physical: 1.1`, `cloud: 1.1`, `limited: 0.7`). Risk levels: `>=70` low, `40-69` medium, `<40` high.
+- **CAF scoring**: `SCORE_MAP` maps `achieved: 100`, `partial: 50`, `not-achieved: 0`, `na: null` (excluded from averages). Rating thresholds: `>=70%` Achieved, `40-69%` Partially Achieved, `<40%` Not Achieved.
+
+### localStorage keys
+
+| Key | Purpose |
+|-----|---------|
+| `cyber-essentials-assessment` | CE assessment state (radios, text, vendors, version `'1.2'`, timestamp) |
+| `caf_assessment_v1` | CAF radio state + sector selection |
+| `caf_assessment_v1_ts` | ISO timestamp of last CAF save |
+| `ce-checker-supply-chain` | `'yes'`/`'no'` — supply chain opt-in |
+| `ce-checker-welcome-seen` | CE welcome modal dismissed |
+| `caf_welcomed` | CAF welcome modal dismissed |
+| `userEmail` / `userName` | Cached Firebase user info |
+| `firebaseAuthComplete` | Temporary auth flag (set by login, cleared by assessment) |
+
+Note: `logout()` in `assessment.html` calls `localStorage.clear()`, which wipes all keys including saved assessment progress.
 
 ### Important conventions
 
@@ -105,7 +121,7 @@ Questions in `assessment.html` follow this template (see `EDITING_QUESTIONS_GUID
 |------|---------|
 | `index.html` | Public landing page with 3 service cards |
 | `login.html` | Login/register page with inline Firebase Auth JS |
-| `assessment.html` | CE assessment form markup (7 control sections, modals) |
+| `assessment.html` | CE assessment form markup (7 control sections, modals) — also contains inline `<script>` with `askConsultant()` Oracle feature (uses relative `/api/analyze` URL, only works via `vercel dev`) |
 | `assessment.js` | CE assessment logic: auto-save, branching, collection, validation, analysis, results, PDF, vendors |
 | `assessment.css` | CE assessment styling including print rules and responsive breakpoints |
 | `caf-assessment.html` | CAF assessment form markup |
