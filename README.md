@@ -121,13 +121,12 @@ No installation, no dependencies, no backend required!
            │
            ├─── Local Analysis (always available)
            │
-           └─── /api/analyze ──▶ Vercel Proxy ──▶ Claude API
+           └─── /api/analyze ──▶ Cloud Function ──▶ Claude API
                                                     ↓
                                               AI-powered report
 ```
 
-**Firebase services used:** Authentication only (email/password, Google Sign-In, TOTP MFA).
-No Firestore, Realtime Database, Storage, Cloud Functions, or Analytics.
+**Firebase services used:** Authentication (email/password, Google Sign-In, TOTP MFA), Hosting, and Cloud Functions (API proxy).
 
 **Tech Stack:**
 

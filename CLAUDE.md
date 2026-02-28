@@ -39,8 +39,8 @@ caf-assessment.html     CAF Assessment UI
 caf-assessment.js       CAF assessment logic
 caf-assessment.css      CAF assessment styles
 firebase-config.js      Public Firebase SDK config
-api/analyze.js          Vercel serverless proxy → Claude API
-api/hello.js            Health-check endpoint (returns { ok: true })
+functions/index.js      Firebase Cloud Functions entry point
+functions/analyze.js    API proxy → Claude API
 ```
 
 ### How the app works
