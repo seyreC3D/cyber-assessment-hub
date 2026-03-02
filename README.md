@@ -4,26 +4,15 @@ AI-powered, interactive assessment tools to evaluate your organisation's readine
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Firebase Hosting](https://img.shields.io/badge/demo-live-brightgreen)](https://cyber-essentials-checker.web.app/)
+#######This repository is source-available. It is NOT open source.
+See LICENSE for details############
+
 
 ## 🚀 Quick Start
 
 **Try it now:** [Live Demo](https://cyber-essentials-checker.web.app/)
 
-**Or run locally:**
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/cyber-essentials-checker.git
 
-# Open in browser
-cd cyber-essentials-checker
-open index.html  # macOS
-# or
-start index.html  # Windows
-# or
-xdg-open index.html  # Linux
-```
-
-No installation, no dependencies, no backend required!
 
 ## 📋 Features
 
