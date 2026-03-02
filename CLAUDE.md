@@ -23,6 +23,14 @@ firebase deploy                # deploy hosting + functions
 firebase emulators:start       # local dev with hosting + functions
 ```
 
+**Important:** The Firebase emulator cannot access Cloud Function secrets. To use the Oracle ("Ask Oracle") or analysis features locally, create `functions/.secret.local` with your API key:
+
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+This file is git-ignored and will not be committed.
+
 There is no test suite. Manual testing covers: auth flow, assessment completion, auto-save, local-analysis fallback, PDF export, and supply chain vendor flow.
 
 ## Architecture

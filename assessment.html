@@ -827,12 +827,15 @@
             })
             .then(function(response) {
                 if (!response.ok) {
-                    return response.json().then(function(errData) {
-                        var detail = errData.details || errData.error || response.status;
-                        throw new Error(detail);
-                    }).catch(function(parseErr) {
-                        if (parseErr.message && parseErr.message !== String(response.status)) throw parseErr;
-                        throw new Error('API request failed: ' + response.status);
+                    return response.text().then(function(rawText) {
+                        try {
+                            var errData = JSON.parse(rawText);
+                            var detail = errData.details || errData.error || response.status;
+                            throw new Error(detail);
+                        } catch (parseErr) {
+                            if (parseErr.message && parseErr.message.indexOf('Unexpected token') === -1) throw parseErr;
+                            throw new Error('API request failed (' + response.status + '). If using the Firebase emulator, ensure ANTHROPIC_API_KEY is set in functions/.secret.local');
+                        }
                     });
                 }
                 return response.json();
