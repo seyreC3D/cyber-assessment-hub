@@ -2,13 +2,15 @@
 
 AI-powered, interactive assessment tools to evaluate your organisation's readiness for UK Cyber Essentials (v3.3) certification and the NCSC Cyber Assessment Framework (CAF v4.0).
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Firebase Hosting](https://img.shields.io/badge/demo-live-brightgreen)](https://cyber-essentials-checker.web.app/)
 #######This repository is source-available. It is NOT open source.
 See LICENSE for details############
 
 
 ## 🚀 Quick Start
 
-**Try it now:** [Live Demo](https://yourusername.github.io/cyber-essentials-checker/)
+**Try it now:** [Live Demo](https://cyber-essentials-checker.web.app/)
 
 
 
@@ -90,17 +92,30 @@ See LICENSE for details############
 ## 🏗️ Architecture
 
 ```
-┌─────────────────┐     ┌──────────────────┐
-│   User Browser  │────▶│  Firebase Auth   │
-│   (HTML/CSS/JS) │     └──────────────────┘
-└────────┬────────┘
-         │
-         ├─── Local Analysis (Always Available)
-         │
-         └─── /api/analyze Proxy ──▶ Claude API
-                                      ↓
-                                Enhanced Insights
+┌──────────────┐       ┌──────────────────────────────┐
+│  index.html  │       │     Firebase Auth (v10.7.1)   │
+│ Landing page │       │  Email/password, Google OAuth │
+└──────┬───────┘       │  TOTP MFA (authenticator app) │
+       │               └──────────────┬───────────────┘
+       ▼                              │
+┌──────────────┐    login / register  │
+│  login.html  │◄────────────────────►│
+└──────┬───────┘                      │
+       │ redirect (?redirect=)        │
+       ▼                              │
+┌──────────────────────┐    onAuthStateChanged
+│  assessment.html     │◄─────────────┘
+│  caf-assessment.html │
+└──────────┬───────────┘
+           │
+           ├─── Local Analysis (always available)
+           │
+           └─── /api/analyze ──▶ Cloud Function ──▶ Claude API
+                                                    ↓
+                                              AI-powered report
 ```
+
+**Firebase services used:** Authentication (email/password, Google Sign-In, TOTP MFA), Hosting, and Cloud Functions (API proxy).
 
 **Tech Stack:**
 
@@ -112,9 +127,8 @@ See LICENSE for details############
 | **Auth methods** | Email/password, Google Sign-In, TOTP MFA | Via Firebase `multiFactor` + `TotpMultiFactorGenerator` |
 | **QR codes** | QRious | v4.0.2, used for TOTP MFA enrolment QR generation |
 | **AI analysis** | Anthropic Claude API | Messages API v2023-06-01; models: `claude-sonnet-4-5-20250929`, `claude-haiku-4-5-20251001` |
-| **API proxy** | Vercel Serverless Function (Node.js ≥ 18) | `api/analyze.js` — keeps `ANTHROPIC_API_KEY` server-side |
-| **Hosting (frontend)** | GitHub Pages | Static files served from `seyrec3d.github.io/cyber-assessment-hub` |
-| **Hosting (API)** | Vercel | `cyber-assessment-hub.vercel.app/api/*` with CORS headers |
+| **API proxy** | Firebase Cloud Function (Node.js ≥ 18) | `functions/analyze.js` — keeps `ANTHROPIC_API_KEY` server-side |
+| **Hosting** | Firebase Hosting | `cyber-essentials-checker.web.app` — static files + Cloud Function rewrites |
 | **Persistence** | Browser localStorage | Auto-save every 1 s; keys listed in CLAUDE.md |
 | **PDF export** | Native `window.print()` | Custom `@media print` CSS for clean output |
 
@@ -131,7 +145,7 @@ cyber-essentials-checker/
 ├── caf-assessment.css            # CAF assessment styles
 ├── caf-assessment.js             # CAF assessment logic, scoring, analysis
 ├── firebase-config.js            # Firebase project configuration
-├── api/                          # Server-side API proxy for Claude
+├── functions/                     # Firebase Cloud Functions (API proxy for Claude)
 ├── README.md                     # This file
 ├── RELEASE_NOTES.md              # Version history and release notes
 ├── CHANGELOG.md                  # Changelog
@@ -145,24 +159,19 @@ cyber-essentials-checker/
 
 ## 🚢 Deployment Options
 
-### Option 1: GitHub Pages (Recommended)
+### Option 1: Firebase Hosting (Recommended)
 ```bash
-1. Fork this repository
-2. Go to Settings → Pages
-3. Source: Deploy from main branch
-4. Your URL: https://yourusername.github.io/cyber-essentials-checker/
+1. Install Firebase CLI: npm install -g firebase-tools
+2. Log in: firebase login
+3. Set API key: firebase functions:secrets:set ANTHROPIC_API_KEY
+4. Deploy: firebase deploy
+5. Your URL: https://cyber-essentials-checker.web.app/
 ```
 
 ### Option 2: Your Website
 ```bash
 # Just upload index.html to your web server
 cp index.html /var/www/html/cyber-essentials/
-```
-
-### Option 3: Email Distribution
-```bash
-# Users can open the HTML file directly
-# No server needed!
 ```
 
 See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for more options.
