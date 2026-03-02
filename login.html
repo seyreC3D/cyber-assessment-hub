@@ -779,6 +779,7 @@
             signInWithPopup,
             GoogleAuthProvider,
             sendPasswordResetEmail,
+            sendEmailVerification,
             setPersistence,
             browserLocalPersistence,
             updateProfile,
@@ -883,9 +884,19 @@
                 localStorage.setItem('userName', name);
                 localStorage.setItem('firebaseAuthComplete', 'true');
 
-                // Offer TOTP MFA enrollment
-                showSuccess('Account created! You can now enable two-factor authentication for extra security.');
-                showMFAEnrollment();
+                // Send verification email — MFA enrollment requires a verified email
+                try {
+                    await sendEmailVerification(userCredential.user);
+                    showSuccess('Account created! A verification email has been sent — please verify your email to enable two-factor authentication.');
+                } catch (verifyErr) {
+                    console.warn('Could not send verification email:', verifyErr);
+                    showSuccess('Account created successfully!');
+                }
+
+                // Redirect to assessment after a short delay
+                setTimeout(() => {
+                    window.location.href = getRedirectTarget();
+                }, 2000);
 
             } catch (error) {
                 showError(getErrorMessage(error.code));
@@ -928,9 +939,9 @@
                 loginBtn.style.background = '#28a745';
             }
 
-            // If TOTP not yet enrolled, offer enrollment
+            // If TOTP not yet enrolled and email is verified, offer enrollment
             const enrolledFactors = multiFactor(user).enrolledFactors;
-            if (enrolledFactors.length === 0) {
+            if (enrolledFactors.length === 0 && user.emailVerified) {
                 showMFAEnrollment();
                 return;
             }
