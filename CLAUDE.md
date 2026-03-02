@@ -29,7 +29,11 @@ firebase emulators:start       # local dev with hosting + functions
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-This file is git-ignored and will not be committed.
+This file is git-ignored and will not be committed. The emulator-only loader in `functions/index.js` reads this file when `FUNCTIONS_EMULATOR=true` and injects the values into `process.env`. If the file approach still fails, you can export the variable before starting the emulator:
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-... firebase emulators:start
+```
 
 There is no test suite. Manual testing covers: auth flow, assessment completion, auto-save, local-analysis fallback, PDF export, and supply chain vendor flow.
 
