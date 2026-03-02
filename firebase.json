@@ -20,8 +20,14 @@
       "package.json"
     ],
     "rewrites": [
-      { "source": "/api/analyze", "function": "analyze" },
-      { "source": "/api/hello", "function": "hello" }
+      {
+        "source": "/api/analyze",
+        "function": "analyze"
+      },
+      {
+        "source": "/api/hello",
+        "function": "hello"
+      }
     ]
   },
   "functions": {
